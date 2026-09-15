@@ -96,7 +96,7 @@
 <section id="economia" class="panel-page">
  <div class="page-title"><div><span class="eyebrow">TESOURO NACIONAL</span><h2>Economia e recursos</h2><p>Produção, energia, comércio e orçamento sustentam o poder nacional.</p></div></div>
  <div class="resource-grid" id="resources"></div>
- <div class="two-col"><div class="card"><h3>🏭 Estrutura produtiva</h3><div id="production"></div></div><div class="card"><h3>📈 Indicadores econômicos</h3><div id="economyBars"></div></div></div>
+ <div class="two-col"><div class="card"><h3>🏭 Estrutura produtiva</h3><div id="production"></div></div><div class="card"><h3>📈 Indicadores econômicos</h3><div id="economyBars"></div><div id="economyFlow" class="economy-flow"></div></div></div>
 </section>
 
 <section id="mapa" class="panel-page">
@@ -104,7 +104,7 @@
  <div class="map-toolbar" aria-label="Camadas do mapa"><button class="map-mode active" data-map-mode="world">🌎 MUNDO</button><button class="map-mode" data-map-mode="atlantic">🌊 ATLÂNTICO</button><button class="map-mode" data-map-mode="political">♟ POLÍTICO</button><button class="map-mode" data-map-mode="routes">⚓ ROTAS</button><button class="map-mode" data-map-mode="resources">⛏ RECURSOS</button></div>
  <div class="map-layout">
    <div class="map-board world-map" id="mapBoard">
- <div class="map-grid"></div>
+ <div class="map-grid"></div><div class="map-background" aria-hidden="true"></div>
  <div class="map-frame-title"><span>ATLAS MUNDI</span><small>projeção estratégica • norte ↑</small></div><div class="map-zoom"><button id="mapZoomOut" aria-label="Diminuir mapa">−</button><b>MAPA</b><button id="mapReset" aria-label="Resetar mapa">1×</button><button id="mapZoomIn" aria-label="Aumentar mapa">+</button></div>
  <div class="map-compass">N<br><b>✦</b></div>
  <svg class="world-svg" viewBox="0 0 1000 520" role="img" aria-label="Mapa estratégico vintage do mundo">
@@ -180,6 +180,6 @@
 </aside>
 <div id="toast" class="toast"></div>
 </div>
-<script src="script.js?v=9.0"></script>
+<script src="script.js?v=10.0"></script>
 </body>
 </html>

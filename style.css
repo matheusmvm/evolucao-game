@@ -559,3 +559,17 @@ main{padding:0 22px}
   .map-node.world span{font-size:7px}.map-node.world small{font-size:6px}
   .map-label{font-size:8px!important;letter-spacing:1px!important}
 }
+
+/* V10 — atlas cartográfico ilustrado */
+.map-board.world-map{background-color:#082733!important;background-image:url("assets/world-map-bg.png")!important;background-size:cover;background-position:center;background-repeat:no-repeat;}
+.map-background{position:absolute;inset:0;background:linear-gradient(rgba(4,24,29,.06),rgba(4,24,29,.12));z-index:1;pointer-events:none;}
+.world-svg{z-index:1;opacity:.16;pointer-events:none;}
+.world-svg .land{fill:transparent!important;stroke:rgba(244,210,117,.18)!important;stroke-width:1.2!important;}
+.map-graticule{opacity:.65;}
+.map-label{z-index:2;text-shadow:2px 2px 0 rgba(5,22,25,.85),0 0 8px rgba(0,0,0,.5);}
+.map-node.world{z-index:5;}
+.map-route{z-index:4;}
+.economy-flow{margin-top:12px;padding:10px 12px;border:1px solid rgba(184,143,73,.55);background:rgba(12,27,20,.72);color:#d9c797;font-size:11px;line-height:1.65;border-radius:5px;}
+.tech-history{margin-top:7px;padding:6px 7px;border-left:2px solid #b48b47;color:#a99b7c;font-size:10px;line-height:1.35;background:rgba(0,0,0,.12);}
+@media (max-width:1050px){.world-map{height:590px!important}.map-node.world{width:94px;height:80px}.map-node.world span{font-size:9px}.map-label{font-size:11px;letter-spacing:1.2px;}}
+@media (max-width:720px){.world-map{height:470px!important;background-position:center top}.map-node.world{width:68px;height:66px}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-label{font-size:8px;letter-spacing:1px}.world-svg{opacity:.08}.economy-flow{font-size:10px;}}

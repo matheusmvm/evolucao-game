@@ -53,3 +53,44 @@ radial-gradient(ellipse at 50% 45%,rgba(44,108,82,.23),transparent 45%),linear-g
 .dip{transition:transform .15s,border-color .15s}.dip:hover{transform:translateY(-2px);border-color:#3d7659}
 .metric{transition:transform .15s}.metric:hover{transform:translateY(-2px)}
 @media(max-width:720px){.diplomacy-actions{position:static}.action-meter{justify-content:center}}
+
+/* V5.1 — correções de interface, seleção inicial e cartografia */
+#startScreen{position:fixed!important;inset:0!important;z-index:9999!important;display:grid!important;place-items:center!important;padding:24px!important;overflow:auto!important;isolation:isolate!important;background:radial-gradient(circle at 50% 12%,rgba(71,151,112,.24),transparent 34%),linear-gradient(180deg,#03110b,#061a12 70%,#04110c)!important}
+#startScreen.hidden{display:none!important}
+#startScreen .start-card{width:min(860px,100%)!important;max-height:calc(100vh - 48px);overflow:auto;position:relative;z-index:1}
+#startScreen .setup-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+#startScreen .setup-grid label{display:block;min-width:0}
+#startScreen .setup-grid select{appearance:auto!important;display:block!important;width:100%!important;min-width:0!important;height:50px!important;box-sizing:border-box!important;color:#eff9f3!important;background:#0b2118!important;border:1px solid #315c49!important}
+#startScreen .setup-grid select:focus{outline:2px solid #67e09e;outline-offset:2px}
+#startScreen .start-btn{cursor:pointer;box-shadow:0 10px 30px rgba(74,205,137,.14)}
+
+.map-toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:-2px 0 10px}
+.map-mode{min-height:38px;padding:8px 12px;font-size:9px;font-weight:900;letter-spacing:.5px;background:#0c2119;border-color:#254a3b}
+.map-mode.active{background:#234b39;border-color:#67e09e;box-shadow:inset 0 -2px 0 #67e09e}
+.map-board{min-width:0}
+.world-svg .land{fill:#2b674b!important;stroke:#72a98b!important;stroke-width:2!important;vector-effect:non-scaling-stroke}
+.world-svg .land.secondary{fill:#24553f!important}
+.world-svg .land.island{fill:#316f52!important}
+.map-board[data-mode="atlantic"] .world-svg .land{opacity:.5}
+.map-board[data-mode="atlantic"] .world-svg .land.atl-focus{opacity:1}
+.map-board[data-mode="political"] .map-node.world{background:rgba(16,45,34,.98);border-color:#7db798}
+.map-board[data-mode="routes"] .map-route{opacity:.9;height:3px;box-shadow:0 0 8px rgba(103,224,158,.25)}
+.map-board[data-mode="routes"] .map-node.world{opacity:.72}
+.map-board[data-mode="world"] .map-route{opacity:.25}
+.map-label.pac{left:8%;top:43%}.map-label.ind{left:62%;top:55%}
+.map-mode-note{margin:10px 0;padding:9px 10px;border:1px solid #173b2c;border-radius:10px;background:#081a13;color:#8eafa0;font-size:9px;line-height:1.45}
+.map-info-head h3{margin-bottom:3px}.map-info-head .big{line-height:1.05}
+
+.action-counter{font-size:12px;font-weight:950;letter-spacing:.4px}
+#actionDots i{width:22px;height:8px}
+#actionDots i.on{background:#67e09e}
+.free-btn{border-color:#315c49}
+
+@media(max-width:720px){
+ #startScreen{padding:12px!important}
+ #startScreen .start-card{max-height:calc(100vh - 24px);padding:20px!important}
+ #startScreen .setup-grid{grid-template-columns:1fr!important}
+ .map-toolbar{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}
+ .map-mode{white-space:nowrap}
+ .map-label{font-size:9px}
+}

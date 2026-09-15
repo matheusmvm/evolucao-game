@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu V5 — Grand Strategy</title>
-<link rel="stylesheet" href="style.css">
+<title>Upaon-Açu V5.1 — Grand Strategy</title>
+<link rel="stylesheet" href="style.css?v=5.1">
 </head>
 <body>
 <div id="startScreen" class="start-screen">
@@ -19,7 +19,7 @@
     <option value="iberia">Península Ibérica</option><option value="africa">África Ocidental</option><option value="india">Índia</option><option value="china">China</option>
    </select></label>
    <label>POVO / CIVILIZAÇÃO<select id="startPeople">
-    <option>Povo Upaonense</option><option>Povo Tupi</option><option>Reino Atlântico Africano</option><option>Reino Ibérico</option><option>Reino do Índico</option><option>Estado Sínico</option><option>Povo personalizado</option>
+    <option value="upaonense">Povo Upaonense</option><option value="tupi">Povo Tupi</option><option value="africano">Reino Atlântico Africano</option><option value="iberico">Reino Ibérico</option><option value="indico">Reino do Índico</option><option value="sinico">Estado Sínico</option><option value="custom">Povo personalizado</option>
    </select></label>
    <label>ÉPOCA DE INÍCIO<select id="startYear">
     <option>1000</option><option>1200</option><option>1300</option><option>1400</option><option value="1460" selected>1460</option><option>1500</option><option>1600</option><option>1700</option><option>1800</option><option>1900</option><option>1950</option><option>2000</option>
@@ -34,7 +34,7 @@
 <header class="topbar">
   <div class="brand-wrap">
     <div class="logo-mark">🌴</div>
-    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • Ciência • Civilização • Atlântico</div></div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V5.1 • Ciência • Civilização • Atlântico</div></div>
   </div>
   <div class="top-controls">
     <span class="save-state" id="saveState">● campanha local</span>
@@ -86,27 +86,30 @@
 
 <section id="mapa" class="panel-page">
  <div class="page-title"><div><span class="eyebrow">TEATRO ATLÂNTICO</span><h2>Mapa estratégico</h2><p>Selecione uma região para inspecionar oportunidades, influência e tensão.</p></div><div class="pill">MAPA DINÂMICO • POTÊNCIAS E ROTAS</div></div>
+ <div class="map-toolbar" aria-label="Camadas do mapa"><button class="map-mode active" data-map-mode="world">🌎 MUNDO</button><button class="map-mode" data-map-mode="atlantic">🌊 ATLÂNTICO</button><button class="map-mode" data-map-mode="political">🗺️ POLÍTICO</button><button class="map-mode" data-map-mode="routes">🚢 ROTAS</button></div>
  <div class="map-layout">
    <div class="map-board world-map" id="mapBoard">
  <div class="map-grid"></div>
- <svg class="world-svg" viewBox="0 0 1000 520">
-  <path class="land" d="M60 85 135 55 205 75 240 125 205 165 165 150 130 190 92 165 60 180 38 135Z"/>
-  <path class="land" d="M205 205 250 220 270 270 248 325 220 390 190 415 168 370 184 320 165 270Z"/>
-  <path class="land" d="M455 82 510 62 575 76 605 110 570 138 520 125 480 145 442 120Z"/>
-  <path class="land" d="M505 150 552 148 588 190 572 245 535 282 515 330 485 312 475 260 455 225 470 180Z"/>
-  <path class="land" d="M595 102 650 88 700 112 738 150 720 185 675 180 642 205 615 178Z"/>
-  <path class="land" d="M705 92 790 82 865 102 920 135 900 160 825 150 770 135 720 140Z"/>
-  <path class="land" d="M760 175 825 180 870 215 850 255 805 260 775 235 740 225Z"/>
-  <path class="land" d="M875 365 930 375 950 400 925 420 875 415 850 395Z"/>
- </svg>
- <div class="map-label atl">ATLÂNTICO</div>
+ <svg class="world-svg" viewBox="0 0 1000 520" role="img" aria-label="Mapa estratégico do mundo">
+  <!-- Formas cartográficas estilizadas, sem dependências externas -->
+  <path class="land atl-focus" d="M48 116 72 72 125 52 180 66 211 95 235 137 210 166 176 151 149 181 120 164 91 181 64 155Z"/>
+  <path class="land atl-focus" d="M207 191 244 204 264 242 252 281 235 318 221 360 196 405 174 379 181 340 169 301 179 266 163 231Z"/>
+  <path class="land secondary" d="M438 91 470 67 514 61 553 75 574 101 548 116 512 109 485 127 452 119Z"/>
+  <path class="land atl-focus" d="M494 143 535 140 563 165 574 201 559 241 548 276 526 311 505 294 493 257 471 230 459 198 470 166Z"/>
+  <path class="land secondary" d="M575 106 616 92 654 104 676 126 667 153 632 153 610 175 584 157Z"/>
+  <path class="land" d="M664 83 714 75 767 82 819 99 857 121 893 148 878 166 836 160 801 146 756 143 719 130 688 136Z"/>
+  <path class="land" d="M751 168 792 177 824 197 845 225 832 252 800 254 777 239 751 230 736 204Z"/>
+  <path class="land island" d="M868 348 913 354 942 374 935 397 904 410 872 399 850 378Z"/>
+  <path class="land island" d="M899 255 920 262 931 276 918 287 898 282 891 268Z"/>
+</svg>
+ <div class="map-label atl">ATLÂNTICO</div><div class="map-label pac">PACÍFICO</div><div class="map-label ind">ÍNDICO</div>
  <button class="map-node world upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span></button>
  <button class="map-node world brazil" data-region="brasil">🇧🇷<span>BRASIL</span></button>
  <button class="map-node world europe" data-region="europa">⚓<span>EUROPA</span></button>
  <button class="map-node world africa" data-region="africa">🌍<span>ÁFRICA</span></button>
  <button class="map-node world asia" data-region="asia">🏯<span>ÁSIA</span></button>
  <button class="map-node world caribbean" data-region="caribe">🏝️<span>CARIBE</span></button>
- <div class="map-route mr1"></div><div class="map-route mr2"></div>
+ <div class="map-route mr1"></div><div class="map-route mr2"></div><div class="map-route mr3"></div><div class="map-route mr4"></div>
 </div>
 <div class="card region-card" id="regionInfo"></div>
  </div>
@@ -123,7 +126,7 @@
  <div class="page-title"><div><span class="eyebrow">PODER NACIONAL</span><h2>Estratégia e inteligência</h2><p>Ações militares são arriscadas; espionagem depende de ciência e informação.</p></div></div>
  <div id="militaryStats" class="stat-grid"></div>
  <div class="two-col">
-  <div class="card operation"><h3>⚔️ Operação militar</h3><select id="attackTarget"></select><button id="attackBtn" class="danger wide">Iniciar ataque</button><p class="hint">Consome 1 ação. Resultados dependem de força, tecnologia, logística e acaso.</p></div>
+  <div class="card operation"><h3>⚔️ Operação militar</h3><select id="attackTarget"></select><button id="attackBtn" class="danger wide">Iniciar ataque</button><p class="hint">Consome <b>2 AP</b>. Resultados dependem de força, tecnologia, logística, prontidão, alianças e acaso.</p></div>
   <div class="card operation"><h3>🕵️ Operação de inteligência</h3><select id="spyTarget"></select><button id="spyBtn" class="secondary wide">Espionar alvo</button><p class="hint">Consome 1 ação. Pode revelar capacidades ou provocar tensão se detectada.</p></div>
  </div>
  <div class="action-grid compact" id="exerciseGrid"></div>
@@ -149,6 +152,6 @@
 </aside>
 <div id="toast" class="toast"></div>
 </div>
-<script src="script.js"></script>
+<script src="script.js?v=5.1"></script>
 </body>
 </html>

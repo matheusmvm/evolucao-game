@@ -573,3 +573,10 @@ main{padding:0 22px}
 .tech-history{margin-top:7px;padding:6px 7px;border-left:2px solid #b48b47;color:#a99b7c;font-size:10px;line-height:1.35;background:rgba(0,0,0,.12);}
 @media (max-width:1050px){.world-map{height:590px!important}.map-node.world{width:94px;height:80px}.map-node.world span{font-size:9px}.map-label{font-size:11px;letter-spacing:1.2px;}}
 @media (max-width:720px){.world-map{height:470px!important;background-position:center top}.map-node.world{width:68px;height:66px}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-label{font-size:8px;letter-spacing:1px}.world-svg{opacity:.08}.economy-flow{font-size:10px;}}
+
+
+/* V11 — polimento e estados geopolíticos */
+.treaty-tags,.war-mini,.cooldown-mini{margin-top:8px;padding:6px 8px;border:1px solid #6f5c38;background:rgba(31,36,29,.75);border-radius:5px;font-size:9px;color:#e2c979}.war-mini{color:#e89a82;border-color:#8b5147}.cooldown-mini{color:#9bc5d4;border-color:#496d79}.dip.at-war{box-shadow:inset 4px 0 0 #a6534b,var(--shadow)}
+.economy-flow small{color:#b8ae91}.resource{min-height:100px}.map-background{background-image:linear-gradient(rgba(8,20,15,.16),rgba(8,20,15,.16)),url('assets/world-map-bg.png');background-size:cover;background-position:center;opacity:.26;mix-blend-mode:screen}
+@media (min-width:721px) and (max-width:1100px){body{font-size:14px}.page-title h2{font-size:25px}.map-board{min-height:500px}.map-node.world{width:76px;height:76px;font-size:9px}.metric b{font-size:16px}.action h3,.tech h3,.dip h3{font-size:15px}}
+@media (max-width:720px){.treaty-tags,.war-mini,.cooldown-mini{font-size:8px}.map-background{opacity:.2}.page-title h2{font-size:22px}}

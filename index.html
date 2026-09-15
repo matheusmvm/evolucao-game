@@ -1,131 +1,115 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#10231c">
-  <title>Upaon-Açu — Estratégia Histórica</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#081711">
+<title>Upaon-Açu — Grand Strategy</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="app">
-  <header class="topbar">
-    <div>
-      <div class="brand">🌴 UPAON-AÇU</div>
-      <div class="subtitle">Estratégia • ciência • civilização • história alternativa</div>
-    </div>
-    <div class="top-actions">
-      <button id="saveBtn" class="secondary">💾 Salvar</button>
-      <button id="loadBtn" class="secondary">↥ Carregar</button>
-      <button id="newBtn" class="danger">Novo jogo</button>
-    </div>
-  </header>
+<div class="app-shell">
+<header class="topbar">
+  <div class="brand-wrap">
+    <div class="logo-mark">🌴</div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • Ciência • Civilização • Atlântico</div></div>
+  </div>
+  <div class="top-controls">
+    <span class="save-state" id="saveState">● campanha local</span>
+    <button id="saveBtn">💾</button><button id="loadBtn">↥</button><button id="newBtn" class="danger">＋ Nova</button>
+  </div>
+</header>
 
-  <section class="hero">
-    <div class="era">
-      <span id="year">1460</span><small>ANO</small>
-      <span class="sep">•</span>
-      <span id="round">1</span><small>ROUND</small>
-    </div>
-    <div class="headline">
-      <strong id="eraName">Era da Fundação</strong>
-      <span id="statusText">A civilização começa a se organizar.</span>
-    </div>
-    <button id="nextRound" class="primary">▶ PRÓXIMO ROUND</button>
-  </section>
+<section class="command">
+  <div class="date-block"><div class="date-label">CALENDÁRIO</div><div><span id="year">1460</span><span class="round">R<span id="round">1</span></span></div><div class="era" id="eraName">Era da Fundação</div></div>
+  <div class="command-center">
+    <div class="season-line"><span class="live-dot"></span> ESTADO DE UPAON-AÇU</div>
+    <h1 id="headline">O nascimento de uma civilização</h1>
+    <p id="statusText">Organize o Estado, desenvolva conhecimento e transforme o Atlântico.</p>
+    <div class="action-meter"><span>ações do ano</span><div id="actionDots"></div></div>
+  </div>
+  <button id="nextRound" class="advance">▶ <b>AVANÇAR ANO</b><small>executar decisões</small></button>
+</section>
 
-  <section class="metrics" id="metrics"></section>
+<section class="metrics" id="metrics"></section>
 
-  <nav class="tabs" role="tablist">
-    <button class="tab active" data-tab="decisoes">🏛️ Decisões</button>
-    <button class="tab" data-tab="tecnologia">🔬 Tecnologia</button>
-    <button class="tab" data-tab="populacao">👥 População</button>
-    <button class="tab" data-tab="infra">🏗️ Infraestrutura</button>
-    <button class="tab" data-tab="militar">🪖 Militar</button>
-    <button class="tab" data-tab="diplomacia">🌎 Diplomacia</button>
-    <button class="tab" data-tab="panorama">🗺️ Panorama</button>
-    <button class="tab" data-tab="historia">📜 História</button>
-  </nav>
+<nav class="tabs">
+ <button class="tab active" data-tab="estado">🏛️ Estado</button>
+ <button class="tab" data-tab="tecnologia">🔬 Tecnologia</button>
+ <button class="tab" data-tab="economia">💰 Economia</button>
+ <button class="tab" data-tab="mapa">🗺️ Mapa</button>
+ <button class="tab" data-tab="populacao">👥 Sociedade</button>
+ <button class="tab" data-tab="militar">⚔️ Estratégia</button>
+ <button class="tab" data-tab="diplomacia">🤝 Diplomacia</button>
+ <button class="tab" data-tab="historia">📜 História</button>
+</nav>
 
-  <main>
-    <section id="decisoes" class="tab-panel active">
-      <div class="section-head">
-        <div><h2>Decisões do Estado</h2><p>Escolha uma ação por ano. O efeito é aplicado no próximo round.</p></div>
-        <div class="pill" id="actionCount">3 ações disponíveis</div>
-      </div>
-      <div class="action-grid" id="actionGrid"></div>
-    </section>
+<main>
+<section id="estado" class="panel-page active">
+ <div class="page-title"><div><span class="eyebrow">CENTRO DE COMANDO</span><h2>Decisões do Estado</h2><p>Você possui três ações por ano. Combine investimentos para criar efeitos de longo prazo.</p></div><div class="action-counter" id="actionCount">3 ações</div></div>
+ <div id="actionGrid" class="action-grid"></div>
+ <div class="intel-strip"><div><span>EVENTO RECENTE</span><b id="latestEvent">Nenhum evento registrado.</b></div><button id="reportBtn">📑 Relatório do round</button></div>
+</section>
 
-    <section id="tecnologia" class="tab-panel">
-      <div class="section-head"><div><h2>Árvore tecnológica</h2><p>O desenvolvimento depende da época, ciência, indústria e decisões anteriores.</p></div></div>
-      <div id="techGrid" class="tech-grid"></div>
-    </section>
+<section id="tecnologia" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">FRONTEIRA DO CONHECIMENTO</span><h2>Árvore tecnológica</h2><p>Avance por eras e crie especializações próprias.</p></div></div>
+ <div id="techTree" class="tech-tree"></div>
+</section>
 
-    <section id="populacao" class="tab-panel">
-      <div class="section-head"><div><h2>População e força de trabalho</h2><p>Educação, saúde, urbanização e industrialização alteram a composição social.</p></div><button id="censusBtn" class="primary">📋 Realizar censo</button></div>
-      <div class="two-col">
-        <div class="panel"><h3>Demografia</h3><div id="demography"></div></div>
-        <div class="panel"><h3>Força de trabalho</h3><div id="workforce"></div></div>
-      </div>
-      <div class="panel"><h3>Evolução histórica</h3><canvas id="chart" width="900" height="260"></canvas></div>
-      <div class="panel"><h3>Último censo</h3><div id="censusReport">Nenhum censo realizado.</div></div>
-    </section>
+<section id="economia" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">TESOURO NACIONAL</span><h2>Economia e recursos</h2><p>Produção, energia, comércio e orçamento sustentam o poder nacional.</p></div></div>
+ <div class="resource-grid" id="resources"></div>
+ <div class="two-col"><div class="card"><h3>🏭 Estrutura produtiva</h3><div id="production"></div></div><div class="card"><h3>📈 Indicadores econômicos</h3><div id="economyBars"></div></div></div>
+</section>
 
-    <section id="infra" class="tab-panel">
-      <div class="section-head"><div><h2>Infraestrutura e cidades</h2><p>Desenvolva São Luís e, mais tarde, novos centros estratégicos.</p></div></div>
-      <div id="cities" class="city-grid"></div>
-      <div class="panel"><h3>Infraestrutura nacional</h3><div id="infraList" class="bar-list"></div></div>
-    </section>
+<section id="mapa" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">TEATRO ATLÂNTICO</span><h2>Mapa estratégico</h2><p>Selecione uma região para inspecionar oportunidades, influência e tensão.</p></div><div class="pill">MAPA DINÂMICO</div></div>
+ <div class="map-layout">
+   <div class="map-board" id="mapBoard">
+     <div class="ocean-label">ATLÂNTICO</div>
+     <button class="map-node upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span></button>
+     <button class="map-node brazil" data-region="brasil">🇧🇷<span>BRASIL</span></button>
+     <button class="map-node europe" data-region="europa">⚓<span>EUROPA</span></button>
+     <button class="map-node africa" data-region="africa">🌍<span>ÁFRICA</span></button>
+     <button class="map-node asia" data-region="asia">🏯<span>ÁSIA</span></button>
+     <div class="route r1"></div><div class="route r2"></div><div class="route r3"></div>
+   </div>
+   <div class="card region-card" id="regionInfo"></div>
+ </div>
+</section>
 
-    <section id="militar" class="tab-panel">
-      <div class="section-head"><div><h2>Forças armadas</h2><p>Exercícios aumentam prontidão sem iniciar guerras automaticamente.</p></div></div>
-      <div id="militaryStats" class="mil-grid"></div>
-      <div class="panel">
-        <h3>Operações estratégicas</h3>
-        <div class="two-col">
-          <div>
-            <label class="muted" for="attackTarget">Alvo de ataque</label>
-            <select id="attackTarget" class="select"></select>
-            <button type="button" id="attackBtn" class="danger wide">⚔️ Iniciar ataque</button>
-          </div>
-          <div>
-            <label class="muted" for="spyTarget">Alvo de espionagem</label>
-            <select id="spyTarget" class="select"></select>
-            <button type="button" id="spyBtn" class="secondary wide">🕵️ Espionar</button>
-          </div>
-        </div>
-        <p class="muted">Operações consomem ações do round. O conflito é resolvido de forma abstrata por poder militar, estabilidade, diplomacia e tecnologia.</p>
-      </div>
-      <div class="action-grid" id="exerciseGrid"></div>
-    </section>
+<section id="populacao" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">SOCIEDADE</span><h2>População e trabalho</h2><p>Saúde, educação e urbanização moldam a transformação social.</p></div><button id="censusBtn" class="gold-btn">📋 Realizar censo</button></div>
+ <div class="two-col"><div class="card"><h3>Demografia</h3><div id="demography"></div></div><div class="card"><h3>Força de trabalho</h3><div id="workforce"></div></div></div>
+ <div class="card"><h3>📊 População ao longo da campanha</h3><canvas id="chart"></canvas></div>
+ <div class="card"><h3>Último censo</h3><div id="censusReport">Nenhum censo.</div></div>
+</section>
 
-    <section id="diplomacia" class="tab-panel">
-      <div class="section-head"><div><h2>Relações internacionais</h2><p>Comércio, ciência, tratados e tensão evoluem com o passar dos anos.</p></div></div>
-      <div id="diplomacyGrid" class="diplomacy-grid"></div>
-    </section>
+<section id="militar" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">PODER NACIONAL</span><h2>Estratégia e inteligência</h2><p>Ações militares são arriscadas; espionagem depende de ciência e informação.</p></div></div>
+ <div id="militaryStats" class="stat-grid"></div>
+ <div class="two-col">
+  <div class="card operation"><h3>⚔️ Operação militar</h3><select id="attackTarget"></select><button id="attackBtn" class="danger wide">Iniciar ataque</button><p class="hint">Consome 1 ação. Resultados dependem de força, tecnologia, logística e acaso.</p></div>
+  <div class="card operation"><h3>🕵️ Operação de inteligência</h3><select id="spyTarget"></select><button id="spyBtn" class="secondary wide">Espionar alvo</button><p class="hint">Consome 1 ação. Pode revelar capacidades ou provocar tensão se detectada.</p></div>
+ </div>
+ <div class="action-grid compact" id="exerciseGrid"></div>
+</section>
 
-    <section id="panorama" class="tab-panel">
-      <div class="section-head"><div><h2>Panorama estratégico</h2><p>Uma leitura simplificada do mundo e do espaço brasileiro.</p></div></div>
-      <div class="two-col">
-        <div class="panel"><h3>🌎 Panorama global</h3><div id="global"></div></div>
-        <div class="panel"><h3>🇧🇷 Panorama brasileiro</h3><div id="brazil"></div></div>
-      </div>
-    </section>
+<section id="diplomacia" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">RELAÇÕES EXTERNAS</span><h2>Diplomacia</h2><p>Construa alianças, comércio e cooperação científica — ou administre rivalidades.</p></div></div>
+ <div id="diplomacyGrid" class="diplomacy-grid"></div>
+</section>
 
-    <section id="historia" class="tab-panel">
-      <div class="section-head"><div><h2>📜 História de Upaon-Açu</h2><p>Linha do tempo dos principais acontecimentos da campanha.</p></div></div>
-      <div id="timeline" class="timeline"></div>
-    </section>
-  </main>
+<section id="historia" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">MEMÓRIA NACIONAL</span><h2>História de Upaon-Açu</h2><p>Uma linha do tempo gerada pelas decisões da sua campanha.</p></div></div>
+ <div id="timeline" class="timeline"></div>
+</section>
+</main>
 
-  <aside id="reportModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-card">
-      <button id="closeModal" class="close">×</button>
-      <div id="roundReport"></div>
-    </div>
-  </aside>
-
-  <div id="toast" class="toast" aria-live="polite"></div>
+<aside id="reportModal" class="modal hidden">
+ <div class="modal-card"><button id="closeModal" class="close">×</button><div id="roundReport"></div></div>
+</aside>
+<div id="toast" class="toast"></div>
 </div>
 <script src="script.js"></script>
 </body>

@@ -1,31 +1,27 @@
-# Upaon-Açu — Jogo de Estratégia
+# Upaon-Açu — Grand Strategy v3
 
-Jogo de estratégia, ciência, tecnologia, população, infraestrutura, diplomacia e história alternativa.
+Versão avançada para GitHub Pages, sem backend.
 
-## Publicação no GitHub Pages
+## Arquivos
+- `index.html`
+- `style.css`
+- `script.js`
 
-1. Envie `index.html`, `style.css` e `script.js` para a raiz do repositório.
-2. Abra **Settings → Pages**.
-3. Em **Build and deployment**, escolha **Deploy from a branch**.
-4. Branch: `main` e pasta: `/ (root)`.
-5. Salve.
-6. Aguarde o GitHub publicar o site.
+## Novidades v3
+- Visual completamente renovado, com interface de centro de comando.
+- Três ações por ano e fila de decisões.
+- Economia com tesouro, alimentos, ferro, madeira, máquinas, energia e comércio.
+- Mapa estratégico visual com regiões selecionáveis.
+- Tecnologia em árvore com desbloqueios por época.
+- Diplomacia e potências estrangeiras com estado próprio.
+- Ataques e espionagem consumindo ações.
+- Exercícios militares.
+- Panorama global automático no relatório de cada round.
+- População, força de trabalho, cidades e censos.
+- Eventos condicionados ao desenvolvimento.
+- História emergente.
+- Save/load via localStorage.
+- Responsivo para notebook, celular e iPad.
 
-O jogo é estático e não precisa de backend. O progresso é salvo no navegador com `localStorage`.
-
-## Controles
-
-- Escolha uma ação.
-- Clique em **PRÓXIMO ROUND** para avançar exatamente um ano.
-- Use as abas para consultar tecnologia, população, infraestrutura, forças armadas, diplomacia, panorama e história.
-- Faça censos e exercícios militares.
-- Salve e carregue a campanha no mesmo navegador.
-
-
-## Mecânicas estratégicas da versão 2
-
-- 3 ações por round, acumuladas em uma fila antes de avançar o ano.
-- Operações estratégicas de ataque e espionagem contra nações monitoradas.
-- Resolução abstrata de conflitos baseada nos indicadores do Estado.
-- Panorama global automático ao final de cada round.
-- Potências estrangeiras com economia, ciência, estabilidade, poder militar e atitude dinâmica.
+## GitHub Pages
+Envie os três arquivos para a raiz do repositório e mantenha `index.html` como entrada. Em Settings → Pages, use `main` e `/ (root)`.

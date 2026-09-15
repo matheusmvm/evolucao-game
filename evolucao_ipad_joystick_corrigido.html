@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Evolução — iPad</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06101b;color:#eefaff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;touch-action:none}
+#app{height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom);max-width:1100px;margin:auto}
+header{height:58px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{font-size:22px;margin:0}.tag{font-size:12px;color:#8fb4c8}
+#reset{touch-action:manipulation;user-select:none;background:#16354b;border:1px solid #28516b;color:#fff;border-radius:12px;padding:9px 13px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+.stat{background:#0c1c2b;border:1px solid #1c3c53;border-radius:12px;padding:8px 10px}.lab{font-size:10px;color:#86aabd}.val{font-size:19px;font-weight:800}
+main{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(290px,.8fr);gap:10px}
+.panel{min-height:0;background:#091a29;border:1px solid #1b3c53;border-radius:15px;padding:9px;position:relative}
+#world{width:100%;height:100%;display:block;touch-action:none;user-select:none;border-radius:11px;background:#02101a}
+#side{overflow:auto;padding:13px}h2,h3{margin:5px 0 9px}
+.evo{display:flex;justify-content:space-between;gap:7px;align-items:center;padding:8px;margin:6px 0;border:1px solid #21465e;border-radius:10px;background:#0c2131}
+.evo strong{font-size:13px}.evo small{display:block;color:#8eafbf;font-size:10px;margin-top:2px}
+.lock{color:#718b9b}.done{color:#63e6b0}.current{border-color:#4bb7e9}
+.bar{height:8px;background:#152c3d;border-radius:8px;overflow:hidden}.fill{height:100%;width:0;background:#57d8a7}
+#log{font-size:11px;color:#a8c6d3;background:#05121e;border-radius:9px;padding:7px;min-height:70px}
+#joystick{position:absolute;z-index:20;left:20px;bottom:20px;width:120px;height:120px;border-radius:50%;background:rgba(65,150,190,.13);border:2px solid rgba(125,210,245,.3)}
+#stick{position:absolute;z-index:21;left:35px;top:35px;width:46px;height:46px;pointer-events:none;border-radius:50%;background:rgba(100,210,245,.65);border:2px solid #c8f2ff}
+#hint{pointer-events:none;position:absolute;right:16px;bottom:20px;background:rgba(0,0,0,.35);padding:8px;border-radius:9px;color:#a7c4d2;font-size:10px}
+@media(max-width:760px){main{grid-template-columns:1fr}.panel:first-child{min-height:0}.panel#side{height:35dvh}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div><h1>🧬 EVOLUÇÃO</h1><div class="tag">Da primeira célula à vida complexa</div></div><button id="reset">↻ Reiniciar</button></header>
+<section class="stats">
+<div class="stat"><div class="lab">ORGANISMO</div><div class="val" id="species">Célula</div></div>
+<div class="stat"><div class="lab">PONTOS GENÉTICOS</div><div class="val" id="gp">0</div></div>
+<div class="stat"><div class="lab">GERAÇÃO</div><div class="val" id="generation">1</div></div>
+<div class="stat"><div class="lab">INTEGRIDADE</div><div class="val" id="hp">100%</div></div>
+</section>
+<main>
+<div class="panel"><canvas id="world"></canvas>
+<div id="joystick"><div id="stick"></div></div>
+<div id="hint">Arraste o joystick<br>e colete nutrientes 🟢</div></div>
+<div class="panel" id="side">
+<h2>Árvore evolutiva</h2><div id="tree"></div>
+<h3>Próxima evolução</h3><div class="bar"><div class="fill" id="fill"></div></div><div id="next" class="tag"></div>
+<h3>Eventos</h3><div id="log"></div>
+</div>
+</main>
+</div>
+<script>
+const cvs=document.getElementById("world"),ctx=cvs.getContext("2d");
+let W=800,H=520,BASE_W=800,BASE_H=520,keys={},joy={x:0,y:0},drag=false;
+let p,food,enemies,gp,gen,hp,unlocked,frame,dead;
+const evos=[
+["Membrana eficiente",15,"Absorção de nutrientes +25%"],
+["Flagelo",35,"Velocidade +30%"],
+["Núcleo celular",70,"Proteção genética"],
+["Multicelularidade",130,"Primeiros tecidos"],
+["Sistema nervoso",220,"Percepção ampliada"],
+["Locomoção avançada",350,"Velocidade +45%"],
+["Órgãos especializados",520,"Eficiência metabólica"],
+["Vertebrado",750,"Estrutura corporal robusta"],
+["Vida terrestre",1050,"Novo ambiente"],
+["Inteligência",1500,"Cultura e tecnologia"]
+];
+function resize(){let r=cvs.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cvs.width=r.width*d;cvs.height=r.height*d;W=r.width;H=r.height;scale=W/800;ctx.setTransform(d,0,0,d,0,0)}
+addEventListener("resize",resize);
+function R(a,b){return Math.random()*(b-a)+a}
+function reset(){dead=false;gp=0;gen=1;hp=100;unlocked=0;frame=0;p={x:400,y:260,r:13,s:2.5};food=[];enemies=[];for(let i=0;i<24;i++)food.push({x:R(15,785),y:R(15,505),r:R(3,6)});for(let i=0;i<3;i++)enemies.push({x:R(20,780),y:R(20,500),r:R(10,15),s:R(.45,.8)});log("Sua linhagem surgiu no oceano primordial.");ui()}
+function log(t){document.getElementById("log").innerHTML="• "+t+"<br>"+document.getElementById("log").innerHTML}
+function d(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function evolve(){
+  while(!dead && unlocked<evos.length && gp>=evos[unlocked][1]){let e=evos[unlocked];gp-=e[1];unlocked++;gen++;p.r+=2;if(e[0]=="Flagelo")p.s*=1.3;if(e[0]=="Locomoção avançada")p.s*=1.45;log("🧬 Evoluiu: "+e[0]+" — "+e[2]);}}
+function ui(){
+let s=unlocked==0?"Célula":unlocked<3?"Célula complexa":unlocked<5?"Organismo multicelular":unlocked<7?"Animal":unlocked<9?"Vertebrado":"Ser humano";
+document.getElementById("species").textContent=s;document.getElementById("gp").textContent=Math.floor(gp);document.getElementById("generation").textContent=gen;document.getElementById("hp").textContent=Math.max(0,Math.floor(hp))+"%";
+let e=evos[unlocked];document.getElementById("next").textContent=e?`${e[0]} — ${e[1]} PG (${Math.floor(gp)}/${e[1]})`:"🌎 Ápice alcançado";document.getElementById("fill").style.width=e?Math.min(100,gp/e[1]*100)+"%":"100%";
+let t=document.getElementById("tree");t.innerHTML="";evos.forEach((e,i)=>{let x=document.createElement("div");x.className="evo "+(i==unlocked?"current":"");x.innerHTML=`<div><strong>${i<unlocked?"✓ ":""}${e[0]}</strong><small>${e[2]}</small></div><b class="${i<unlocked?"done":"lock"}">${i<unlocked?"OK":e[1]+" PG"}</b>`;t.appendChild(x)})
+}
+function update(){
+if(dead)return;
+let vx=joy.x+(keys.ArrowRight||keys.d?1:0)-(keys.ArrowLeft||keys.a?1:0),vy=joy.y+(keys.ArrowDown||keys.s?1:0)-(keys.ArrowUp||keys.w?1:0),m=Math.hypot(vx,vy);if(m){vx/=m;vy/=m;p.x+=vx*p.s;p.y+=vy*p.s}
+p.x=Math.max(p.r,Math.min(800-p.r,p.x));p.y=Math.max(p.r,Math.min(520-p.r,p.y));
+for(let i=food.length-1;i>=0;i--)if(d(p,food[i])<p.r+food[i].r){gp+=2;food.splice(i,1);food.push({x:R(10,790),y:R(10,510),r:R(3,6)});evolve()}
+enemies.forEach(e=>{let x=p.x-e.x,y=p.y-e.y,m=Math.hypot(x,y)||1;e.x+=x/m*e.s;e.y+=y/m*e.s;if(d(p,e)<p.r+e.r)hp-=.13});
+if(frame++%1000==0&&frame>0){enemies.push({x:R(20,780),y:R(20,500),r:R(10,16),s:R(.5,.9)});log("⚠️ A nova geração de predadores aumenta a pressão seletiva.")}
+if(hp<=0){dead=true;log("☠️ Sua linhagem foi extinta. Toque em Reiniciar.");}
+ui()
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const sx=W/BASE_W, sy=H/BASE_H;
+  ctx.save();
+  ctx.scale(sx,sy);
+  for(let i=0;i<100;i++){
+    ctx.fillStyle="rgba(90,190,210,.10)";
+    ctx.fillRect((i*83+frame*.08)%BASE_W,(i*47)%BASE_H,2,2);
+  }
+  food.forEach(f=>{
+    ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+    ctx.fillStyle="#5ee6ad";ctx.fill();
+  });
+  enemies.forEach(e=>{
+    ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+    ctx.fillStyle="#e65f70";ctx.fill();
+    ctx.fillStyle="#07111f";
+    ctx.beginPath();ctx.arc(e.x-4,e.y-3,2,0,Math.PI*2);ctx.fill();
+  });
+  ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+  ctx.fillStyle="#57b9ff";ctx.fill();
+  ctx.strokeStyle="#d0f3ff";ctx.lineWidth=2;ctx.stroke();
+  if(dead){
+    ctx.fillStyle="rgba(0,0,0,.7)";ctx.fillRect(0,0,BASE_W,BASE_H);
+    ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 32px system-ui";
+    ctx.fillText("EXTINÇÃO",BASE_W/2,245);
+  }
+  ctx.restore();
+}
+function loop(){update();draw();requestAnimationFrame(loop)}
+function setJoyPoint(clientX, clientY){
+  const r=j.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  let x=clientX-cx, y=clientY-cy;
+  const max=Math.max(10,(r.width/2)-23);
+  const m=Math.hypot(x,y)||1;
+  if(m>max){x=x/m*max;y=y/m*max}
+  joy.x=x/max; joy.y=y/max;
+  stick.style.transform=`translate(${x}px,${y}px)`;
+}
+function releaseJoy(){
+  drag=false; joy.x=0; joy.y=0;
+  stick.style.transform="translate(0px,0px)";
+}
+const j=document.getElementById("joystick"), stick=document.getElementById("stick");
+
+j.addEventListener("pointerdown",e=>{
+  if(dead)return;
+  drag=true;
+  try{j.setPointerCapture(e.pointerId)}catch(_){}
+  setJoyPoint(e.clientX,e.clientY);
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  setJoyPoint(e.clientX,e.clientY);
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("pointerup",e=>{
+  releaseJoy();
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("pointercancel",releaseJoy);
+j.addEventListener("lostpointercapture",releaseJoy);
+
+/* Fallback para iPad/Safari caso pointer events sejam interrompidos. */
+j.addEventListener("touchstart",e=>{
+  if(dead)return;
+  drag=true;
+  const t=e.changedTouches[0];
+  setJoyPoint(t.clientX,t.clientY);
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("touchmove",e=>{
+  if(!drag)return;
+  const t=e.changedTouches[0];
+  setJoyPoint(t.clientX,t.clientY);
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("touchend",e=>{
+  releaseJoy();
+  e.preventDefault();
+},{passive:false});
+
+j.addEventListener("touchcancel",releaseJoy);
+
+addEventListener("keydown",e=>keys[e.key]=true);addEventListener("keyup",e=>keys[e.key]=false);document.getElementById("reset").onclick=reset;
+resize();reset();loop();
+</script>
+</body>
+</html>

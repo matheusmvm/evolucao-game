@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu V6 — Grand Strategy Vintage</title>
-<link rel="stylesheet" href="style.css?v=6.0">
+<title>Upaon-Açu V7 — Grand Strategy Vintage</title>
+<link rel="stylesheet" href="style.css?v=7.0">
 </head>
 <body>
 <div id="startScreen" class="start-screen">
@@ -19,7 +19,13 @@
     <option value="iberia">Península Ibérica</option><option value="africa">África Ocidental</option><option value="india">Índia</option><option value="china">China</option>
    </select></label>
    <label>POVO / CIVILIZAÇÃO<select id="startPeople">
-    <option value="upaonense">Povo Upaonense</option><option value="tupi">Povo Tupi</option><option value="africano">Reino Atlântico Africano</option><option value="iberico">Reino Ibérico</option><option value="indico">Reino do Índico</option><option value="sinico">Estado Sínico</option><option value="custom">Povo personalizado</option>
+    <optgroup label="🇧🇷 Povos do Brasil"><option value="upaonense">Povo Upaonense</option><option value="tupinamba">Tupinambá</option><option value="guarani">Guarani</option><option value="marajoara">Marajoara</option><option value="macroje">Macro-Jê</option><option value="guaicuru">Guaicuru</option></optgroup>
+    <optgroup label="🌍 África"><option value="africano">Reino Atlântico Africano</option><option value="sahel">Reino do Sahel</option><option value="swahili">Cidades Suaílis</option></optgroup>
+    <optgroup label="🇪🇺 Europa"><option value="iberico">Reino Ibérico</option><option value="franca">Reino Franco</option><option value="inglesa">Reino Inglês</option><option value="holandesa">Províncias Neerlandesas</option></optgroup>
+    <optgroup label="🌎 Américas"><option value="norteamericano">Povos da América do Norte</option><option value="asteca">Mexicas</option><option value="maia">Cidades Maias</option><option value="inca">Tawantinsuyu</option><option value="caribenho">Povos Caribenhos</option></optgroup>
+    <optgroup label="🌏 Ásia"><option value="indico">Reino do Índico</option><option value="sinico">Estado Sínico</option><option value="japonesa">Japão</option><option value="persa">Reino Persa</option></optgroup>
+    <optgroup label="🌊 Oceania"><option value="polinesia">Confederação Polinésia</option><option value="melanesia">Povos Melanésios</option><option value="australiano">Povos da Austrália</option></optgroup>
+    <option value="custom">Povo personalizado</option>
    </select></label>
    <label>ÉPOCA DE INÍCIO<select id="startYear">
     <option>1000</option><option>1200</option><option>1300</option><option>1400</option><option value="1460" selected>1460</option><option>1500</option><option>1600</option><option>1700</option><option>1800</option><option>1900</option><option>1950</option><option>2000</option>
@@ -27,14 +33,14 @@
   </div>
   <div id="startPreview" class="setup-preview"></div>
   <button id="startGame" class="start-btn">▶ INICIAR CAMPANHA</button>
-  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V6 traz identidade visual pixel-vintage, povos distintos, mapas em camadas e 5 AP por ano.</p>
+  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V7 preserva as correções anteriores e adiciona povos regionais, tradições tecnológicas, pré-requisitos causais e projetos desbloqueados pela pesquisa.</p>
  </div>
 </div>
 <div class="app-shell">
 <header class="topbar">
   <div class="brand-wrap">
     <div class="logo-mark" id="logoMark">🌴</div>
-    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V6 • Ciência • Civilização • Atlântico</div></div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V7 • História • Ciência • Geopolítica</div></div>
   </div>
   <div class="top-controls">
     <span class="save-state" id="saveState">● campanha local</span>
@@ -77,7 +83,7 @@
 
 <section id="tecnologia" class="panel-page">
  <div class="page-title"><div><span class="eyebrow">FRONTEIRA DO CONHECIMENTO</span><h2>Árvore tecnológica</h2><p>Avance por eras e crie especializações próprias.</p></div></div>
- <div id="techTree" class="tech-tree"></div>
+ <div id="civilizationProfile" class="card civ-profile"></div><div class="tech-legend"><b>CADEIA CAUSAL</b><span>Uma tecnologia só pode ser pesquisada quando o ano e os pré-requisitos estiverem cumpridos.</span><span>🔬 Pesquisa = 1 AP • custo varia conforme a tradição cultural.</span><span>🔓 Tecnologias desbloqueiam projetos reais.</span></div><div id="techTree" class="tech-tree"></div>
 </section>
 
 <section id="economia" class="panel-page">

@@ -1,17 +1,16 @@
-# Upaon-Açu V6.1 — Grand Strategy Vintage
+# Upaon-Açu V7
 
-Versão web estática, sem backend, pronta para GitHub Pages.
+Grand Strategy histórico/geopolítico em HTML, CSS e JavaScript puro.
 
-## V6.1
-- identidade visual pixel-vintage/indie inspirada em jogos de tabuleiro clássicos;
-- identidades próprias para os povos selecionáveis;
-- 5 pontos de ação (AP) restaurados a cada ano;
-- mapa com camadas Mundo, Atlântico, Político, Rotas e Recursos;
-- regiões clicáveis com painel de inspeção;
-- zoom do mapa e ações regionais que consomem AP;
-- rotas, influência, diplomacia, espionagem, guerras, exercícios, tecnologia, população, economia e história;
-- correções da seleção inicial e separação entre poder diplomático e relações;
-- save local em `localStorage` usando a chave `upaon-acu-v6`.
+## V7
+- Mantém as correções da V5.1/V6.1 e 5 AP por ano.
+- Povos brasileiros, africanos, europeus, americanos, asiáticos e oceânicos com características, traços e tradições tecnológicas próprias.
+- Árvore tecnológica causal: ano mínimo + pré-requisitos.
+- Pesquisa dirigida custa 1 AP e recursos; tradições culturais podem reduzir custos.
+- Tecnologias desbloqueiam projetos concretos: navios, geradores elétricos, aeronaves e computadores.
+- Tecnologia de materiais participa da cadeia que leva à eletricidade e motores.
+- História registra pesquisas, projetos, diplomacia, guerra e eventos.
+- Funciona offline/GitHub Pages, sem backend e sem bibliotecas externas.
 
 ## Publicação
-Envie `index.html`, `style.css` e `script.js` para um repositório público e ative GitHub Pages. O jogo não exige servidor, login ou API externa.
+Envie `index.html`, `style.css`, `script.js` e este README para o repositório do GitHub Pages.

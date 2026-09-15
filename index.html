@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu V5.1 — Grand Strategy</title>
-<link rel="stylesheet" href="style.css?v=5.1">
+<title>Upaon-Açu V6 — Grand Strategy Vintage</title>
+<link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body>
 <div id="startScreen" class="start-screen">
  <div class="start-card">
-  <div class="start-emblem">🌎</div><div class="eyebrow">SIMULADOR CIVILIZACIONAL</div>
-  <h1>UPAON-AÇU</h1><p class="start-sub">Escolha onde, quem e quando sua história começa.</p>
+  <div class="start-emblem pixel-seal">✦</div><div class="eyebrow">SIMULADOR CIVILIZACIONAL • EDIÇÃO VINTAGE</div>
+  <h1>UPAON-AÇU</h1><p class="start-sub">Escolha onde, quem e quando sua história começa.</p><div id="startIdentity" class="start-identity"></div>
   <div class="setup-grid">
    <label>LOCAL / REGIÃO<select id="startLocation">
     <option value="upaon">Upaon-Açu — Ilha e entorno</option><option value="brasil">Brasil — território regional</option>
@@ -27,14 +27,14 @@
   </div>
   <div id="startPreview" class="setup-preview"></div>
   <button id="startGame" class="start-btn">▶ INICIAR CAMPANHA</button>
-  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V5 adiciona AP, alianças, guerras, influência, rotas e equilíbrio de poder.</p>
+  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V6 traz identidade visual pixel-vintage, povos distintos, mapas em camadas e 5 AP por ano.</p>
  </div>
 </div>
 <div class="app-shell">
 <header class="topbar">
   <div class="brand-wrap">
-    <div class="logo-mark">🌴</div>
-    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V5.1 • Ciência • Civilização • Atlântico</div></div>
+    <div class="logo-mark" id="logoMark">🌴</div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V6 • Ciência • Civilização • Atlântico</div></div>
   </div>
   <div class="top-controls">
     <span class="save-state" id="saveState">● campanha local</span>
@@ -42,13 +42,15 @@
   </div>
 </header>
 
+<section class="identity-bar" id="identityBar"><div class="identity-seal" id="identitySeal">✦</div><div><span class="eyebrow">IDENTIDADE CIVILIZACIONAL</span><strong id="identityName">Povo Upaonense</strong><small id="identityMotto">Ilha, mar e conhecimento.</small></div><div class="identity-tags" id="identityTags"></div></section>
+
 <section class="command">
   <div class="date-block"><div class="date-label">CALENDÁRIO</div><div><span id="year">1460</span><span class="round">R<span id="round">1</span></span></div><div class="era" id="eraName">Era da Fundação</div></div>
   <div class="command-center">
     <div class="season-line"><span class="live-dot"></span> ESTADO DE UPAON-AÇU</div>
     <h1 id="headline">O nascimento de uma civilização</h1>
     <p id="statusText">Organize o Estado, desenvolva conhecimento e transforme o Atlântico.</p>
-    <div class="action-meter"><span>ações do ano</span><div id="actionDots"></div></div>
+    <div class="action-meter"><span>5 PONTOS DE AÇÃO</span><div id="actionDots"></div><b id="apReadout">5 / 5</b></div>
   </div>
   <div class="advance-wrap"><button id="nextRound" class="advance">▶ <b>AVANÇAR ANO</b><small>executar decisões</small></button><button id="freeRound" class="free-btn">⏩ PASSAR SEM AÇÕES</button></div>
 </section>
@@ -85,31 +87,40 @@
 </section>
 
 <section id="mapa" class="panel-page">
- <div class="page-title"><div><span class="eyebrow">TEATRO ATLÂNTICO</span><h2>Mapa estratégico</h2><p>Selecione uma região para inspecionar oportunidades, influência e tensão.</p></div><div class="pill">MAPA DINÂMICO • POTÊNCIAS E ROTAS</div></div>
- <div class="map-toolbar" aria-label="Camadas do mapa"><button class="map-mode active" data-map-mode="world">🌎 MUNDO</button><button class="map-mode" data-map-mode="atlantic">🌊 ATLÂNTICO</button><button class="map-mode" data-map-mode="political">🗺️ POLÍTICO</button><button class="map-mode" data-map-mode="routes">🚢 ROTAS</button></div>
+ <div class="page-title"><div><span class="eyebrow">CARTOGRAFIA ESTRATÉGICA</span><h2>Atlas do mundo</h2><p>Explore regiões, centros de poder, rotas e teatros estratégicos.</p></div><div class="pill">ATLAS VINTAGE • CAMADAS DINÂMICAS</div></div>
+ <div class="map-toolbar" aria-label="Camadas do mapa"><button class="map-mode active" data-map-mode="world">🌎 MUNDO</button><button class="map-mode" data-map-mode="atlantic">🌊 ATLÂNTICO</button><button class="map-mode" data-map-mode="political">♟ POLÍTICO</button><button class="map-mode" data-map-mode="routes">⚓ ROTAS</button><button class="map-mode" data-map-mode="resources">⛏ RECURSOS</button></div>
  <div class="map-layout">
    <div class="map-board world-map" id="mapBoard">
  <div class="map-grid"></div>
- <svg class="world-svg" viewBox="0 0 1000 520" role="img" aria-label="Mapa estratégico do mundo">
-  <!-- Formas cartográficas estilizadas, sem dependências externas -->
-  <path class="land atl-focus" d="M48 116 72 72 125 52 180 66 211 95 235 137 210 166 176 151 149 181 120 164 91 181 64 155Z"/>
-  <path class="land atl-focus" d="M207 191 244 204 264 242 252 281 235 318 221 360 196 405 174 379 181 340 169 301 179 266 163 231Z"/>
-  <path class="land secondary" d="M438 91 470 67 514 61 553 75 574 101 548 116 512 109 485 127 452 119Z"/>
-  <path class="land atl-focus" d="M494 143 535 140 563 165 574 201 559 241 548 276 526 311 505 294 493 257 471 230 459 198 470 166Z"/>
-  <path class="land secondary" d="M575 106 616 92 654 104 676 126 667 153 632 153 610 175 584 157Z"/>
-  <path class="land" d="M664 83 714 75 767 82 819 99 857 121 893 148 878 166 836 160 801 146 756 143 719 130 688 136Z"/>
-  <path class="land" d="M751 168 792 177 824 197 845 225 832 252 800 254 777 239 751 230 736 204Z"/>
-  <path class="land island" d="M868 348 913 354 942 374 935 397 904 410 872 399 850 378Z"/>
-  <path class="land island" d="M899 255 920 262 931 276 918 287 898 282 891 268Z"/>
-</svg>
+ <div class="map-frame-title"><span>ATLAS MUNDI</span><small>projeção estratégica • norte ↑</small></div><div class="map-zoom"><button id="mapZoomOut" aria-label="Diminuir mapa">−</button><b>MAPA</b><button id="mapReset" aria-label="Resetar mapa">1×</button><button id="mapZoomIn" aria-label="Aumentar mapa">+</button></div>
+ <div class="map-compass">N<br><b>✦</b></div>
+ <svg class="world-svg" viewBox="0 0 1000 520" role="img" aria-label="Mapa estratégico vintage do mundo">
+  <defs><pattern id="paperGrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#79a994" stroke-opacity=".12"/></pattern></defs>
+  <rect width="1000" height="520" fill="url(#paperGrid)"/>
+  <path class="land atl-focus" d="M55 108 77 67 127 49 180 62 209 94 234 137 207 166 174 150 145 178 117 162 87 180 62 151 45 128Z"/>
+  <path class="land atl-focus" d="M207 188 241 202 261 238 252 279 235 318 219 365 196 405 176 377 180 337 168 300 177 263 162 230Z"/>
+  <path class="land secondary" d="M424 88 459 63 506 57 550 72 573 98 547 114 511 107 483 124 447 117Z"/>
+  <path class="land atl-focus" d="M493 141 534 137 563 161 576 201 559 242 548 278 526 311 504 294 491 257 470 230 457 198 469 165Z"/>
+  <path class="land secondary" d="M576 103 615 89 653 101 676 124 667 151 631 152 608 173 584 155Z"/>
+  <path class="land" d="M660 81 713 73 767 80 820 97 858 119 895 146 878 165 836 159 800 145 756 141 719 128 687 134Z"/>
+  <path class="land" d="M749 166 791 175 825 195 847 224 832 252 800 255 775 239 750 228 735 203Z"/>
+  <path class="land island" d="M866 346 913 352 943 373 935 397 903 410 871 399 849 378Z"/>
+  <path class="land island" d="M898 253 920 260 932 275 918 287 897 281 890 267Z"/>
+  <g class="map-graticule"><ellipse cx="500" cy="260" rx="435" ry="205" fill="none"/><ellipse cx="500" cy="260" rx="320" ry="205" fill="none"/><path d="M70 260H930M500 55V465"/></g>
+ </svg>
  <div class="map-label atl">ATLÂNTICO</div><div class="map-label pac">PACÍFICO</div><div class="map-label ind">ÍNDICO</div>
- <button class="map-node world upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span></button>
- <button class="map-node world brazil" data-region="brasil">🇧🇷<span>BRASIL</span></button>
- <button class="map-node world europe" data-region="europa">⚓<span>EUROPA</span></button>
- <button class="map-node world africa" data-region="africa">🌍<span>ÁFRICA</span></button>
- <button class="map-node world asia" data-region="asia">🏯<span>ÁSIA</span></button>
- <button class="map-node world caribbean" data-region="caribe">🏝️<span>CARIBE</span></button>
+ <button class="map-node world upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span><small>capital</small></button>
+ <button class="map-node world brazil" data-region="brasil">🌎<span>BRASIL</span><small>continental</small></button>
+ <button class="map-node world caribbean" data-region="caribe">🏝️<span>CARIBE</span><small>ilhas</small></button>
+ <button class="map-node world iberia" data-region="iberia">⚓<span>IBÉRIA</span><small>europa</small></button>
+ <button class="map-node world europe" data-region="europa">♜<span>EUROPA</span><small>potências</small></button>
+ <button class="map-node world africa" data-region="africa">🌍<span>ÁFRICA O.</span><small>atlântico</small></button>
+ <button class="map-node world maghreb" data-region="magrebe">☪<span>MAGREBE</span><small>mediterrâneo</small></button>
+ <button class="map-node world india" data-region="india">◈<span>ÍNDIA</span><small>índico</small></button>
+ <button class="map-node world asia" data-region="asia">🏯<span>CHINA</span><small>leste asiático</small></button>
  <div class="map-route mr1"></div><div class="map-route mr2"></div><div class="map-route mr3"></div><div class="map-route mr4"></div>
+ <div class="map-legend"><span><i class="legend-dot player"></i> sua civilização</span><span><i class="legend-dot power"></i> potência</span><span><i class="legend-line"></i> rota</span><span><i class="legend-square"></i> recursos</span></div><div class="map-hint">Clique em uma região para inspecionar • use as camadas para mudar o foco</div>
+</div>
 </div>
 <div class="card region-card" id="regionInfo"></div>
  </div>
@@ -152,6 +163,6 @@
 </aside>
 <div id="toast" class="toast"></div>
 </div>
-<script src="script.js?v=5.1"></script>
+<script src="script.js?v=6.1"></script>
 </body>
 </html>

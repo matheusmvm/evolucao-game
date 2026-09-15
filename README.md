@@ -1,19 +1,17 @@
-# Upaon-Açu V5.1 — Grand Strategy
+# Upaon-Açu V6.1 — Grand Strategy Vintage
 
-Jogo de estratégia/civilização em HTML, CSS e JavaScript puro, pronto para GitHub Pages.
+Versão web estática, sem backend, pronta para GitHub Pages.
 
-## V5.1
-- 5 Pontos de Ação (AP) por ano, com indicador visual de 5 pontos.
-- Ações de 1 ou 2 AP e validação de recursos antes da execução.
-- Passagem de ano sem ações; eventos e evolução passiva continuam funcionando.
-- Correção do bug que misturava a pontuação nacional de diplomacia com o objeto de relações diplomáticas.
-- Migração compatível com saves V5 anteriores.
-- Seleção inicial corrigida: região, povo/civilização e época possuem valores estáveis e perfis próprios.
-- Tela inicial isolada e responsiva, evitando sobreposição com o jogo.
-- Mapa reorganizado com camadas Mundo, Atlântico, Político e Rotas.
-- Cartografia SVG local, sem bibliotecas externas.
-- Guerra impede ataque contra aliados e evita iniciar uma segunda guerra contra o mesmo alvo enquanto o conflito está ativo.
-- Alianças, tratados, influência, espionagem, rotas e equilíbrio internacional continuam integrados.
+## V6.1
+- identidade visual pixel-vintage/indie inspirada em jogos de tabuleiro clássicos;
+- identidades próprias para os povos selecionáveis;
+- 5 pontos de ação (AP) restaurados a cada ano;
+- mapa com camadas Mundo, Atlântico, Político, Rotas e Recursos;
+- regiões clicáveis com painel de inspeção;
+- zoom do mapa e ações regionais que consomem AP;
+- rotas, influência, diplomacia, espionagem, guerras, exercícios, tecnologia, população, economia e história;
+- correções da seleção inicial e separação entre poder diplomático e relações;
+- save local em `localStorage` usando a chave `upaon-acu-v6`.
 
 ## Publicação
-Envie `index.html`, `style.css` e `script.js` para um repositório público e ative GitHub Pages. Não há backend ou banco de dados.
+Envie `index.html`, `style.css` e `script.js` para um repositório público e ative GitHub Pages. O jogo não exige servidor, login ou API externa.

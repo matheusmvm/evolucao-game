@@ -33,7 +33,7 @@
   </div>
   <div id="startPreview" class="setup-preview"></div>
   <button id="startGame" class="start-btn">▶ INICIAR CAMPANHA</button>
-  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V8 preserva as correções anteriores e reforça a identidade visual de tabuleiro vintage, a leitura dos mapas e a personalidade dos povos.</p>
+  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V8.1 preserva as correções anteriores e reforça a identidade visual de tabuleiro vintage, a leitura dos mapas e a personalidade dos povos.</p>
  </div>
 </div>
 <div class="app-shell">
@@ -151,7 +151,7 @@
 
 <section id="diplomacia" class="panel-page">
  <div class="page-title"><div><span class="eyebrow">RELAÇÕES EXTERNAS</span><h2>Diplomacia</h2><p>Construa alianças, comércio e cooperação científica — ou administre rivalidades.</p></div></div>
- <div class="card diplomacy-actions"><h3>Tratados e relações</h3><div class="treaty-row">
+ <div class="card diplomacy-actions"><div class="dip-target"><label for="diplomacyTarget">ALVO DIPLOMÁTICO</label><select id="diplomacyTarget" aria-label="Selecionar alvo diplomático"></select></div><h3>Tratados e relações</h3><div class="treaty-row">
 <button id="tradeTreaty">🤝 Comercial <small>1 AP</small></button><button id="scienceTreaty">🔬 Científico <small>1 AP</small></button><button id="nonAggression">🕊️ Não agressão <small>1 AP</small></button>
 <button id="allianceBtn" class="gold-btn">🛡️ Formar aliança <small>2 AP</small></button><button id="tradeRouteBtn">🚢 Abrir rota comercial <small>1 AP</small></button>
 </div><p class="hint">Selecione o alvo no painel Estratégia. Alianças exigem confiança e boa atitude.</p></div>

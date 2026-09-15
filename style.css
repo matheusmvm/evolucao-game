@@ -416,3 +416,44 @@ main{padding:0 22px}
   .start-card{padding:24px 17px!important}.start-card h1{font-size:37px!important}
 }
 @media(max-width:480px){.action-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.identity-tags{gap:4px}.identity-tags span{font-size:7px;padding:4px 5px}}
+
+
+/* V8.1 — Atlas, legibilidade e responsividade */
+.map-board{min-height:520px;border-radius:10px;background:
+ radial-gradient(ellipse at 50% 45%,rgba(41,106,133,.22),transparent 50%),
+ linear-gradient(180deg,#082b3a 0%,#062330 100%);}
+.map-board::after{content:"ATLAS MUNDI";position:absolute;left:18px;bottom:14px;font-family:Georgia,serif;font-size:11px;letter-spacing:3px;color:rgba(235,210,147,.42);pointer-events:none;}
+.world-svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.35));}
+.land{fill:#426f50;stroke:#c8a85b;stroke-width:2.2;vector-effect:non-scaling-stroke;}
+.land.secondary{fill:#587b55;}
+.land.atl-focus{fill:#527f59;}
+.land.island{fill:#66865c;}
+.map-graticule{stroke:#8ab0a8!important;stroke-opacity:.18!important;}
+.map-label{font-family:Georgia,serif;text-shadow:1px 1px 0 #05202b;letter-spacing:3px;}
+.map-node.world{width:94px;height:78px;border-radius:6px;background:linear-gradient(180deg,#20382b,#0d2119);border:2px solid #b99451;box-shadow:4px 4px 0 #06100c,0 0 0 1px rgba(240,204,111,.35);}
+.map-node.world span{font-size:10px;line-height:1.15;}
+.map-node.world small{font-size:8px;}
+.map-node.world:hover{transform:translateY(-3px) scale(1.04);}
+.map-node.world.selected{background:linear-gradient(180deg,#5a7045,#2b4830);}
+/* Coordenadas cartográficas corrigidas */
+.map-node.world.upaon{left:25%;top:55%;}
+.map-node.world.brazil{left:18%;top:69%;}
+.map-node.world.caribbean{left:25%;top:39%;}
+.map-node.world.iberia{left:51%;top:24%;}
+.map-node.world.europe{left:48%;top:18%;}
+.map-node.world.maghreb{left:52%;top:35%;}
+.map-node.world.africa{left:50%;top:54%;}
+.map-node.world.india{left:66%;top:42%;}
+.map-node.world.asia{left:73%;top:29%;}
+.map-route{height:3px;background:repeating-linear-gradient(90deg,#e0bd61 0 8px,transparent 8px 14px);opacity:.58;box-shadow:0 0 4px rgba(224,189,97,.2);}
+.map-board[data-mode="routes"] .map-route{opacity:1;height:4px;}
+.map-board[data-mode="political"] .land{fill:#4e7454;}
+.map-board[data-mode="resources"] .land{fill:#526d47;}
+.map-legend{background:rgba(5,22,28,.78);border:1px solid #806638;border-radius:4px;padding:7px 9px;backdrop-filter:blur(2px);}
+.dip-target{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:9px 10px;background:rgba(19,47,35,.65);border:1px solid var(--line);border-radius:8px;}
+.dip-target label{font-size:9px;color:var(--gold);letter-spacing:1px;font-weight:800;white-space:nowrap;}
+.dip-target select{flex:1;min-height:38px;background:#0b2118;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 9px;}
+@media(min-width:1051px){body{font-size:13px}.brand{font-size:22px}.metric .value{font-size:21px}.metric .label{font-size:10px}.tab{font-size:11px}.action h3{font-size:16px}.action p{font-size:11px}.map-board{height:590px!important}.map-node.world{width:106px;height:86px}.map-node.world span{font-size:11px}.map-node.world small{font-size:9px}.page-title h2{font-size:28px;}.dip h3{font-size:15px}.row{font-size:11px;}}
+@media(min-width:721px) and (max-width:1050px){.map-board{height:540px!important}.map-node.world{width:90px;height:76px}.map-node.world span{font-size:9px}.metric .value{font-size:20px}.page-title h2{font-size:26px;}}
+@media(max-width:720px){.map-board{height:480px!important;min-height:0}.map-node.world{width:72px;height:64px}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-node.world.upaon{left:20%;top:53%}.map-node.world.brazil{left:11%;top:69%}.map-node.world.caribbean{left:22%;top:37%}.map-node.world.iberia{left:48%;top:25%}.map-node.world.europe{left:45%;top:18%}.map-node.world.maghreb{left:51%;top:34%}.map-node.world.africa{left:47%;top:53%}.map-node.world.india{left:64%;top:43%}.map-node.world.asia{left:71%;top:29%}.dip-target{align-items:stretch;flex-direction:column;gap:5px}.dip-target select{width:100%;font-size:13px}.map-label{font-size:10px;letter-spacing:2px}.map-board::after{font-size:9px;bottom:9px;left:12px}}
+@media(max-width:480px){.map-board{height:430px!important}.map-node.world{width:66px;height:58px}.map-node.world span{font-size:7px}.map-node.world small{font-size:6px}.metric .value{font-size:17px}.metric .label{font-size:8px}.tab{font-size:10px}.page-title h2{font-size:22px}}

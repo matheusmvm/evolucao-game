@@ -1,0 +1,17 @@
+{
+  "ancestral": [
+    {"id":"fire","name":"Domínio do fogo","unlock":"cozinha, cerâmica inicial e transformação de materiais"},
+    {"id":"stone_tools","name":"Ferramentas de pedra","unlock":"caça, corte e construção básica","requires":["fire"]},
+    {"id":"fibers","name":"Fibras e cordas","unlock":"armadilhas, redes e amarração","requires":["stone_tools"]},
+    {"id":"canoes","name":"Canoas","unlock":"navegação fluvial e costeira","requires":["fibers"]},
+    {"id":"plant_management","name":"Manejo de plantas","unlock":"agricultura experimental","requires":["stone_tools"]},
+    {"id":"agriculture","name":"Agricultura","unlock":"aldeias, excedente alimentar e especialização","requires":["plant_management"]},
+    {"id":"ceramics","name":"Cerâmica","unlock":"armazenamento e recipientes","requires":["fire"]},
+    {"id":"metallurgy","name":"Metalurgia","unlock":"cobre e ligas posteriores","requires":["fire","ceramics"]}
+  ],
+  "industrial": [
+    {"id":"electricity","name":"Eletricidade","unlock":"geradores e redes elétricas","requires":["materials","physics"]},
+    {"id":"motor","name":"Motor elétrico","unlock":"máquinas elétricas","requires":["electricity","electromagnetism"]},
+    {"id":"aeronautics","name":"Aeronáutica","unlock":"aeronaves experimentais","requires":["combustion","engineering"]}
+  ]
+}

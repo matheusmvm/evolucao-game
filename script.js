@@ -1,6 +1,6 @@
 (() => {
 "use strict";
-const KEY="upaon-acu-v12";const LEGACY_KEYS=["upaon-acu-v11","upaon-acu-v10","upaon-acu-v9","upaon-acu-v8.1"];
+const KEY="upaon-acu-v14";const LEGACY_KEYS=["upaon-acu-v13","upaon-acu-v12","upaon-acu-v11","upaon-acu-v10","upaon-acu-v9","upaon-acu-v8.1"];
 const clamp=(n,a=0,b=100)=>Math.max(a,Math.min(b,Number(n)||0));
 const fmt=n=>new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(Math.max(0,n));
 const money=n=>"¤ "+new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(Math.max(0,n));
@@ -463,19 +463,19 @@ renderMap=function(){oldRenderMapV12();ensureV12State();applyV12MapTransform();b
 const oldNextRoundV12=nextRound;
 nextRound=function(free=false){const before=S.year;oldNextRoundV12(free);if(S.year!==before){simulateGeopoliticsV12();ensureV12State();applyV12MapTransform();render();showReport();}};
 
-function save(){localStorage.setItem(KEY,JSON.stringify(S));$("saveState").textContent='● salvo agora';toast('Campanha V13 salva neste navegador.')}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));$("saveState").textContent='● salvo agora';toast('Campanha V14 salva neste navegador.')}
 function load(){try{
  let raw=localStorage.getItem(KEY); let source=KEY;
  if(!raw){for(const k of LEGACY_KEYS){raw=localStorage.getItem(k);if(raw){source=k;break;}}}
- if(!raw)return toast('Nenhum save V13/V12/V11/V10/V9 encontrado.');
+ if(!raw)return toast('Nenhum save V14/V13/V12/V11/V10/V9 encontrado.');
  const x=JSON.parse(raw); S=Object.assign(structuredClone(initial),x); ensureState();
  S.startPeopleId=x.startPeopleId||x.identity||'custom'; S.selectedRegion=x.selectedRegion||'upaon';S.mapMode=x.mapMode||'world';S.mapZoom=clamp(Number(x.mapZoom)||1,.85,1.8);S.mapPanX=clamp(Number(x.mapPanX)||0,-260,260);S.mapPanY=clamp(Number(x.mapPanY)||0,-180,180);S.geopoliticalLog=Array.isArray(x.geopoliticalLog)?x.geopoliticalLog:[];
  S.actionsLeft=Number.isFinite(+x.actionsLeft)?clamp(+x.actionsLeft,0,5):5;
- if(source!==KEY){S.history.push({year:S.year,text:`Save legado migrado para V13 (${source}).`});} ensureV13State();
- clampAll();$('startScreen').classList.add('hidden');render();toast(`Campanha ${source===KEY?'V12':'legada'} carregada.`);
+ if(source!==KEY){S.history.push({year:S.year,text:`Save legado migrado para V14 (${source}).`});} ensureV13State();
+ clampAll();$('startScreen').classList.add('hidden');render();toast(`Campanha ${source===KEY?'V14':'legada'} carregada.`);
  }catch(e){console.error(e);toast('Save inválido ou incompatível.');}}
 
-function newGame(){if(confirm('Começar uma nova campanha V13?')){$("startScreen").classList.remove('hidden');S=structuredClone(initial);S.actionsLeft=5;S.diplomacyPower=18;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.geopoliticalLog=[];setupPreview();render();}}
+function newGame(){if(confirm('Começar uma nova campanha V14?')){$("startScreen").classList.remove('hidden');S=structuredClone(initial);S.actionsLeft=5;S.diplomacyPower=18;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.geopoliticalLog=[];setupPreview();render();}}
 function toast(t){const x=$("toast");x.textContent=t;x.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove('show'),2300)}
 
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel-page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='populacao')drawChart()});
@@ -489,4 +489,5 @@ const oldNextRoundV13=nextRound;
 nextRound=function(free=false){const before=S.year;oldNextRoundV13(free);if(S.year!==before){applyFocusYear();ensureV13State();evaluateObjectives();renderV13Hub();renderV13DiplomacyPulse();render();}};
 window.addEventListener('resize',drawChart);
 render();
+window.UPAON_GAME={getState:()=>S,render,save,load,version:"14.0"};
 })();

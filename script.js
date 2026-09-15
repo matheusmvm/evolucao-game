@@ -1,6 +1,6 @@
 (() => {
 "use strict";
-const KEY="upaon-acu-v14";const LEGACY_KEYS=["upaon-acu-v13","upaon-acu-v12","upaon-acu-v11","upaon-acu-v10","upaon-acu-v9","upaon-acu-v8.1"];
+const KEY="upaon-acu-v16";const LEGACY_KEYS=["upaon-acu-v15","upaon-acu-v14","upaon-acu-v13","upaon-acu-v12","upaon-acu-v11","upaon-acu-v10","upaon-acu-v9","upaon-acu-v8.1"];
 const clamp=(n,a=0,b=100)=>Math.max(a,Math.min(b,Number(n)||0));
 const fmt=n=>new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(Math.max(0,n));
 const money=n=>"¤ "+new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(Math.max(0,n));
@@ -155,7 +155,7 @@ function setupPreview(){const l=START_CONTEXTS[$("startLocation").value],y=$("st
 ["startLocation","startPeople","startYear"].forEach(id=>$(id).addEventListener("change",setupPreview));setupPreview();
 function startCampaign(){
  const y=+$('startYear').value,loc=$('startLocation').value,peopleId=$('startPeople').value,people=PEOPLE_PROFILES[peopleId]||PEOPLE_PROFILES.custom;
- S=structuredClone(initial);S.year=y;S.round=1;S.startLocation=loc;S.startPeople=people.name;S.startRegionName=START_CONTEXTS[loc][0];S.startPeopleId=peopleId;S.actionsLeft=5;S.selectedActions=[];S.selectedRegion=({upaon:"upaon",brasil:"brasil",amazonia:"brasil",nordeste:"brasil",caribe:"caribe",iberia:"iberia",africa:"africa",india:"india",china:"asia"}[loc]||"upaon");S.mapMode="world";S.diplomacyPower=18;S.identity=peopleId;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.mapHistory=[];S.geopoliticalLog=[];Object.entries(people.techStart||{}).forEach(([k,v])=>S.tech[k]=v);S.researchPoints=Object.keys(people.techStart||{}).length;
+ S=structuredClone(initial);S.year=y;S.round=1;S.startLocation=loc;S.startPeople=people.name;S.startRegionName=START_CONTEXTS[loc][0];S.startPeopleId=peopleId;S.actionsLeft=5;S.selectedActions=[];S.selectedRegion=({upaon:"upaon",brasil:"brasil",amazonia:"brasil",nordeste:"brasil",caribe:"caribe",iberia:"iberia",africa:"africa",india:"india",china:"asia"}[loc]||"upaon");S.mapMode="world";S.diplomacyPower=18;S.identity=peopleId;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.mapHistory=[];S.geopoliticalLog=[];Object.entries(people.techStart||{}).forEach(([k,v])=>S.tech[k]=v);const matureByYear=tech.filter(t=>Number(t.year||0)<=y&&Number(t.year||0)>=1000).sort((a,b)=>Number(a.year)-Number(b.year));const historicalCap=Math.min(6,Math.floor(Math.max(0,y-1460)/35));matureByYear.slice(0,historicalCap).forEach(t=>{if((t.prereq||[]).every(p=>techHas(p)))S.tech[t.id]=1});S.researchPoints=Math.max(3,Object.keys(S.tech).filter(k=>Number(S.tech[k])>=1).length);
  S.history=[{year:y,text:`Campanha iniciada em ${START_CONTEXTS[loc][0]} como ${people.name}.`}];
  const scale=Math.max(0,(y-1460)/10);
  S.population*=Math.pow(1.006,scale)*people.pop;S.food*=people.food;S.wood*=people.wood;
@@ -221,7 +221,30 @@ function renderActions(){
  $("actionGrid").innerHTML=actions.map(a=>{const ap=a.ap||1;const techOk=!a.techReq||a.techReq.every(techHas);const disabled=S.actionsLeft<ap||!techOk;const reason=!techOk?`Requer: ${a.techReq.filter(x=>!techHas(x)).map(x=>techById(x)?.name||x).join(', ')}`:'';return `<button class="action" data-action="${a.id}" ${disabled?'disabled':''}><span class="icon">${a.icon}</span><span class="cat">${a.cat} • ${ap} AP</span><h3>${a.name}</h3><p>${a.desc}</p><span class="cost">${a.cost}</span>${reason?`<small class="lock-note">🔒 ${reason}</small>`:''}</button>`}).join('');
  document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>executeAction(b.dataset.action));
 }
-function executeAction(id){const a=actions.find(x=>x.id===id);if(!a)return;const ap=a.ap||1;const requirements={industry:[['iron',4,'Ferro insuficiente.'],['treasury',15,'Tesouro insuficiente.']],energy:[['wood',6,'Madeira insuficiente.'],['treasury',10,'Tesouro insuficiente.']],transport:[['wood',8,'Madeira insuficiente.'],['treasury',12,'Tesouro insuficiente.']],naval:[['wood',10,'Madeira insuficiente.'],['iron',3,'Ferro insuficiente.']],compute:[['treasury',15,'Tesouro insuficiente.']],mil:[['food',4,'Alimento insuficiente.'],['treasury',12,'Tesouro insuficiente.']],fort:[['iron',3,'Ferro insuficiente.'],['treasury',10,'Tesouro insuficiente.']],admin:[['treasury',8,'Tesouro insuficiente.']],edu:[['treasury',10,'Tesouro insuficiente.']],science:[['treasury',12,'Tesouro insuficiente.']],health:[['treasury',10,'Tesouro insuficiente.']],trade:[['treasury',3,'Tesouro insuficiente.']],resources:[['treasury',7,'Tesouro insuficiente.']],urban:[['treasury',9,'Tesouro insuficiente.']],influence:[['treasury',6,'Tesouro insuficiente.']],intelligence:[['treasury',8,'Tesouro insuficiente.']]};if(S.actionsLeft<ap)return toast('Pontos de ação insuficientes.');for(const [key,value,msg] of (requirements[id]||[])){if((S[key]||0)<value)return toast(msg)}S.actionsLeft-=ap;a.apply();S.selectedActions.push(a.name);S.history.push({year:S.year,text:`${a.name}.`});clampAll();render();toast(`${a.name} executada.`)}
+function executeAction(id){
+ const a=actions.find(x=>x.id===id);if(!a)return;const ap=a.ap||1;
+ const requirements={
+  industry:[["iron",4,"Ferro insuficiente."],["treasury",15,"Tesouro insuficiente."]],
+  energy:[["wood",6,"Madeira insuficiente."],["treasury",10,"Tesouro insuficiente."]],
+  transport:[["wood",8,"Madeira insuficiente."],["treasury",12,"Tesouro insuficiente."]],
+  naval:[["wood",10,"Madeira insuficiente."],["iron",3,"Ferro insuficiente."]],
+  aero:[["treasury",14,"Tesouro insuficiente."]],
+  compute:[["treasury",15,"Tesouro insuficiente."]],
+  mil:[["food",4,"Alimento insuficiente."],["treasury",12,"Tesouro insuficiente."]],
+  fort:[["iron",3,"Ferro insuficiente."],["treasury",10,"Tesouro insuficiente."]],
+  admin:[["treasury",8,"Tesouro insuficiente."]],edu:[["treasury",10,"Tesouro insuficiente."]],science:[["treasury",12,"Tesouro insuficiente."]],
+  health:[["treasury",10,"Tesouro insuficiente."]],trade:[["treasury",3,"Tesouro insuficiente."]],resources:[["treasury",7,"Tesouro insuficiente."]],
+  urban:[["treasury",9,"Tesouro insuficiente."]],influence:[["treasury",6,"Tesouro insuficiente."]],intelligence:[["treasury",8,"Tesouro insuficiente."]],
+  ship:[["wood",14,"Madeira insuficiente."],["iron",6,"Ferro insuficiente."]],
+  generator:[["iron",5,"Ferro insuficiente."],["treasury",18,"Tesouro insuficiente."]],
+  aircraft:[["machines",1,"Máquinas insuficientes."],["treasury",25,"Tesouro insuficiente."]],
+  computer:[["machines",2,"Máquinas insuficientes."],["treasury",30,"Tesouro insuficiente."]]
+ };
+ if(S.actionsLeft<ap)return toast("Pontos de ação insuficientes.");
+ if(a.techReq&& !a.techReq.every(techHas))return toast(`Tecnologia insuficiente: ${a.techReq.filter(x=>!techHas(x)).map(x=>techById(x)?.name||x).join(", ")}.`);
+ for(const [key,value,msg] of (requirements[id]||[])){if(Number(S[key]||0)<value)return toast(msg)}
+ S.actionsLeft-=ap;a.apply();S.selectedActions.push(a.name);S.history.push({year:S.year,text:`${a.name}.`});clampAll();render();toast(`${a.name} executada.`)
+}
 function techCost(t){return (t.prereq||[]).length>=3?2:1}
 function techAvailable(t){return S.year>=Number(t.year||0) && (t.prereq||[]).every(p=>techHas(p))}
 function techBlockReason(t){if(S.year<Number(t.year||0))return `Ano mínimo: ${techYearLabel(t.year)}`;const missing=(t.prereq||[]).filter(p=>!techHas(p)).map(p=>techById(p)?.name||p);return missing.length?`Requer: ${missing.join(', ')}`:`Pronta para pesquisa`}
@@ -307,7 +330,7 @@ function strategicAttack(){
 }
 
 function espionage(){if(S.actionsLeft<1)return toast('Sem AP.');const id=targetId('spy'),n=S.nations[id];if(!n)return toast('Alvo inválido.');S.actionsLeft--;const intel=clamp(S.science*.45+S.tech.dados*4+S.tech.semfio*3+Math.random()*25);if(Math.random()*100<intel){S.science+=2;S.technology+=1;S.influence[id]=(S.influence[id]||0)+4;S.history.push({year:S.year,text:`Inteligência obtida sobre ${n.name}: forças e economia avaliadas.`});toast(`Informações obtidas sobre ${n.name}.`)}else{n.tension=clamp(n.tension+10);n.attitude=clamp(n.attitude-6,-100,100);S.diplomacyPower-=3;S.history.push({year:S.year,text:`Espionagem contra ${n.name} foi detectada.`});toast(`Operação detectada por ${n.name}.`)}clampAll();render()}
-function treaty(type){if(S.actionsLeft<1)return toast('Sem AP.');const id=targetId('diplomacy'),n=S.nations[id],d=S.relations[id];if(!n||!d)return toast('Alvo diplomático inválido.');if(type!=='peace'&&S.treaties[type]?.includes(id))return toast(`Já existe um tratado ${type==='trade'?'comercial':'científico'} com ${n.name}.`);if(!n||!d)return toast('Alvo diplomático inválido.');if(type==='peace'&&S.warStatus[id]==='war'){S.actionsLeft--;d.trust=clamp(d.trust+18);n.tension=clamp(n.tension-20);n.attitude=clamp(n.attitude+12,-100,100);S.stability+=2;S.warStatus[id]='peace';S.history.push({year:S.year,text:`Armistício e pacto de não agressão com ${n.name}.`});clampAll();render();return toast(`Paz negociada com ${n.name}.`)}S.actionsLeft--;if(type==='trade'){d.trade=clamp(d.trade+12);n.trade=clamp(n.trade+8);S.economy+=3;S.treasury+=6;n.tension=clamp(n.tension-6)}if(type==='science'){d.science+=8;S.science+=3;S.technology+=2;n.attitude=clamp(n.attitude+5,-100,100)}if(type==='peace'){d.trust=clamp(d.trust+12);n.tension=clamp(n.tension-15);n.attitude=clamp(n.attitude+10,-100,100);S.stability+=2;S.warStatus[id]='peace'}S.history.push({year:S.year,text:`Tratado ${type==='trade'?'comercial':type==='science'?'científico':'de não agressão'} firmado com ${n.name}.`});if(type==='trade'||type==='science'){if(!S.treaties[type].includes(id))S.treaties[type].push(id)}else{if(!S.treaties.peace.includes(id))S.treaties.peace.push(id)}clampAll();render();toast(`Tratado firmado com ${n.name}.`)}
+function treaty(type){if(S.actionsLeft<1)return toast('Sem AP.');const id=targetId('diplomacy'),n=S.nations[id],d=S.relations[id];if(!n||!d)return toast('Alvo diplomático inválido.');if(type!=='peace'&&S.treaties[type]?.includes(id))return toast(`Já existe um tratado ${type==='trade'?'comercial':'científico'} com ${n.name}.`);if(!n||!d)return toast('Alvo diplomático inválido.');if(type==='peace'&&S.warStatus[id]==='war'){S.actionsLeft--;d.trust=clamp(d.trust+18);n.tension=clamp(n.tension-20);n.attitude=clamp(n.attitude+12,-100,100);S.stability+=2;S.warStatus[id]='peace';if(!S.treaties.peace.includes(id))S.treaties.peace.push(id);S.history.push({year:S.year,text:`Armistício e pacto de não agressão com ${n.name}.`});clampAll();render();return toast(`Paz negociada com ${n.name}.`)}S.actionsLeft--;if(type==='trade'){d.trade=clamp(d.trade+12);n.trade=clamp(n.trade+8);S.economy+=3;S.treasury+=6;n.tension=clamp(n.tension-6)}if(type==='science'){d.science+=8;S.science+=3;S.technology+=2;n.attitude=clamp(n.attitude+5,-100,100)}if(type==='peace'){d.trust=clamp(d.trust+12);n.tension=clamp(n.tension-15);n.attitude=clamp(n.attitude+10,-100,100);S.stability+=2;S.warStatus[id]='peace'}S.history.push({year:S.year,text:`Tratado ${type==='trade'?'comercial':type==='science'?'científico':'de não agressão'} firmado com ${n.name}.`});if(type==='trade'||type==='science'){if(!S.treaties[type].includes(id))S.treaties[type].push(id)}else{if(!S.treaties.peace.includes(id))S.treaties.peace.push(id)}clampAll();render();toast(`Tratado firmado com ${n.name}.`)}
 function alliance(){if(S.actionsLeft<2)return toast('Aliança exige 2 AP.');const id=targetId('diplomacy'),n=S.nations[id],d=S.relations[id];if(!n||!d)return toast('Alvo diplomático inválido.');if(S.warStatus[id]==='war')return toast('Não é possível formar aliança durante uma guerra.');if(S.alliances.includes(id))return toast(`Você já é aliado de ${n.name}.`);if(d.trust<25||n.attitude<15)return toast('Confiança insuficiente para uma aliança.');S.actionsLeft-=2;S.alliances.push(id);d.alliance='alliance';n.alliance='Upaon-Açu';n.tension=clamp(n.tension-12);S.diplomacyPower+=5;S.military+=2;S.history.push({year:S.year,text:`Aliança estratégica formada com ${n.name}.`});clampAll();render();toast(`Aliança formada com ${n.name}.`)}
 function openTradeRouteFor(id,fromMap=false){
  const n=S.nations[id],d=S.relations[id]; if(!n||!d)return false;
@@ -463,25 +486,25 @@ renderMap=function(){oldRenderMapV12();ensureV12State();applyV12MapTransform();b
 const oldNextRoundV12=nextRound;
 nextRound=function(free=false){const before=S.year;oldNextRoundV12(free);if(S.year!==before){simulateGeopoliticsV12();ensureV12State();applyV12MapTransform();render();showReport();}};
 
-function save(){localStorage.setItem(KEY,JSON.stringify(S));$("saveState").textContent='● salvo agora';toast('Campanha V14 salva neste navegador.')}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));$("saveState").textContent='● salvo agora';toast('Campanha V16 salva neste navegador.')}
 function load(){try{
  let raw=localStorage.getItem(KEY); let source=KEY;
  if(!raw){for(const k of LEGACY_KEYS){raw=localStorage.getItem(k);if(raw){source=k;break;}}}
- if(!raw)return toast('Nenhum save V14/V13/V12/V11/V10/V9 encontrado.');
+ if(!raw)return toast('Nenhum save V16/V15/V14/V13/V12/V11/V10/V9 encontrado.');
  const x=JSON.parse(raw); S=Object.assign(structuredClone(initial),x); ensureState();
  S.startPeopleId=x.startPeopleId||x.identity||'custom'; S.selectedRegion=x.selectedRegion||'upaon';S.mapMode=x.mapMode||'world';S.mapZoom=clamp(Number(x.mapZoom)||1,.85,1.8);S.mapPanX=clamp(Number(x.mapPanX)||0,-260,260);S.mapPanY=clamp(Number(x.mapPanY)||0,-180,180);S.geopoliticalLog=Array.isArray(x.geopoliticalLog)?x.geopoliticalLog:[];
  S.actionsLeft=Number.isFinite(+x.actionsLeft)?clamp(+x.actionsLeft,0,5):5;
- if(source!==KEY){S.history.push({year:S.year,text:`Save legado migrado para V14 (${source}).`});} ensureV13State();
- clampAll();$('startScreen').classList.add('hidden');render();toast(`Campanha ${source===KEY?'V14':'legada'} carregada.`);
+ if(source!==KEY){S.history.push({year:S.year,text:`Save legado migrado para V16 (${source}).`});} ensureV13State();
+ clampAll();$('startScreen').classList.add('hidden');render();toast(`Campanha ${source===KEY?'V16':'legada'} carregada.`);
  }catch(e){console.error(e);toast('Save inválido ou incompatível.');}}
 
-function newGame(){if(confirm('Começar uma nova campanha V14?')){$("startScreen").classList.remove('hidden');S=structuredClone(initial);S.actionsLeft=5;S.diplomacyPower=18;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.geopoliticalLog=[];setupPreview();render();}}
+function newGame(){if(confirm('Começar uma nova campanha V16?')){$("startScreen").classList.remove('hidden');S=structuredClone(initial);S.actionsLeft=5;S.diplomacyPower=18;S.mapZoom=1;S.mapPanX=0;S.mapPanY=0;S.geopoliticalLog=[];setupPreview();render();}}
 function toast(t){const x=$("toast");x.textContent=t;x.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove('show'),2300)}
 
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel-page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='populacao')drawChart()});
 $("nextRound").onclick=()=>nextRound(false);$("freeRound").onclick=()=>nextRound(true);$("attackBtn").onclick=strategicAttack;$("spyBtn").onclick=espionage;$("censusBtn").onclick=()=>doCensus(false);$("tradeTreaty").onclick=()=>treaty('trade');$("scienceTreaty").onclick=()=>treaty('science');$("nonAggression").onclick=()=>treaty('peace');$("saveBtn").onclick=save;$("loadBtn").onclick=load;$("newBtn").onclick=newGame;$("reportBtn").onclick=()=>{if(S.lastReport)showReport();else toast('Ainda não há relatório.')};$("closeModal").onclick=()=>$("reportModal").classList.add('hidden');$("reportModal").onclick=e=>{if(e.target.id==='reportModal')e.currentTarget.classList.add('hidden')};
 if($("allianceBtn"))$("allianceBtn").onclick=alliance;if($("tradeRouteBtn"))$("tradeRouteBtn").onclick=tradeRoute;
-document.querySelectorAll('.map-node.world').forEach(b=>b.onclick=()=>{S.selectedRegion=b.dataset.region;renderMap()});document.querySelectorAll('.map-mode').forEach(b=>b.onclick=()=>{S.mapMode=b.dataset.mapMode;renderMap()});if($("mapZoomIn"))$("mapZoomIn").onclick=()=>{S.mapZoom=clamp((S.mapZoom||1)+.15,.85,1.6);renderMap()};if($("mapZoomOut"))$("mapZoomOut").onclick=()=>{S.mapZoom=clamp((S.mapZoom||1)-.15,.85,1.6);renderMap()};if($("mapReset"))$("mapReset").onclick=()=>{S.mapZoom=1;renderMap()};
+document.querySelectorAll('.map-node.world').forEach(b=>b.onclick=()=>{S.selectedRegion=b.dataset.region;renderMap()});document.querySelectorAll('.map-mode').forEach(b=>b.onclick=()=>{S.mapMode=b.dataset.mapMode;renderMap()});if($("mapZoomIn"))$("mapZoomIn").onclick=()=>{S.mapZoom=clamp((S.mapZoom||1)+.15,.85,1.8);renderMap()};if($("mapZoomOut"))$("mapZoomOut").onclick=()=>{S.mapZoom=clamp((S.mapZoom||1)-.15,.85,1.8);renderMap()};if($("mapReset"))$("mapReset").onclick=()=>{S.mapZoom=1;renderMap()};
 fixV12Diplomacy();
 const oldRenderV13Base=render;
 render=function(){ensureV13State();oldRenderV13Base();renderV13Hub();renderV13DiplomacyPulse();};
@@ -489,5 +512,5 @@ const oldNextRoundV13=nextRound;
 nextRound=function(free=false){const before=S.year;oldNextRoundV13(free);if(S.year!==before){applyFocusYear();ensureV13State();evaluateObjectives();renderV13Hub();renderV13DiplomacyPulse();render();}};
 window.addEventListener('resize',drawChart);
 render();
-window.UPAON_GAME={getState:()=>S,render,save,load,version:"14.0"};
+window.UPAON_GAME={getState:()=>S,render,save,load,version:"16.0"};
 })();

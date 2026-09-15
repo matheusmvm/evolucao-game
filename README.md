@@ -15,3 +15,8 @@ Grand strategy histórico em HTML/CSS/JavaScript, pronto para GitHub Pages.
 ## Arquitetura
 HTML/CSS/JS + TypeScript de referência + JSON + SVG + Canvas + ferramentas Python.
 Sem backend e sem dependências externas obrigatórias.
+
+
+## V16 — Auditoria e correções
+
+V16 preserva a V15 e concentra-se em robustez: validação de recursos em projetos, consistência de tratados de paz, migração de saves V15/V14, limite rígido de 5 AP, zoom consistente até 1,8× e validações estáticas adicionais.

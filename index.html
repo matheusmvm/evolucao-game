@@ -4,10 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu — Grand Strategy</title>
+<title>Upaon-Açu V5 — Grand Strategy</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="startScreen" class="start-screen">
+ <div class="start-card">
+  <div class="start-emblem">🌎</div><div class="eyebrow">SIMULADOR CIVILIZACIONAL</div>
+  <h1>UPAON-AÇU</h1><p class="start-sub">Escolha onde, quem e quando sua história começa.</p>
+  <div class="setup-grid">
+   <label>LOCAL / REGIÃO<select id="startLocation">
+    <option value="upaon">Upaon-Açu — Ilha e entorno</option><option value="brasil">Brasil — território regional</option>
+    <option value="amazonia">Amazônia</option><option value="nordeste">Nordeste Atlântico</option><option value="caribe">Caribe</option>
+    <option value="iberia">Península Ibérica</option><option value="africa">África Ocidental</option><option value="india">Índia</option><option value="china">China</option>
+   </select></label>
+   <label>POVO / CIVILIZAÇÃO<select id="startPeople">
+    <option>Povo Upaonense</option><option>Povo Tupi</option><option>Reino Atlântico Africano</option><option>Reino Ibérico</option><option>Reino do Índico</option><option>Estado Sínico</option><option>Povo personalizado</option>
+   </select></label>
+   <label>ÉPOCA DE INÍCIO<select id="startYear">
+    <option>1000</option><option>1200</option><option>1300</option><option>1400</option><option value="1460" selected>1460</option><option>1500</option><option>1600</option><option>1700</option><option>1800</option><option>1900</option><option>1950</option><option>2000</option>
+   </select></label>
+  </div>
+  <div id="startPreview" class="setup-preview"></div>
+  <button id="startGame" class="start-btn">▶ INICIAR CAMPANHA</button>
+  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V5 adiciona AP, alianças, guerras, influência, rotas e equilíbrio de poder.</p>
+ </div>
+</div>
 <div class="app-shell">
 <header class="topbar">
   <div class="brand-wrap">
@@ -28,7 +50,7 @@
     <p id="statusText">Organize o Estado, desenvolva conhecimento e transforme o Atlântico.</p>
     <div class="action-meter"><span>ações do ano</span><div id="actionDots"></div></div>
   </div>
-  <button id="nextRound" class="advance">▶ <b>AVANÇAR ANO</b><small>executar decisões</small></button>
+  <div class="advance-wrap"><button id="nextRound" class="advance">▶ <b>AVANÇAR ANO</b><small>executar decisões</small></button><button id="freeRound" class="free-btn">⏩ PASSAR SEM AÇÕES</button></div>
 </section>
 
 <section class="metrics" id="metrics"></section>
@@ -46,7 +68,7 @@
 
 <main>
 <section id="estado" class="panel-page active">
- <div class="page-title"><div><span class="eyebrow">CENTRO DE COMANDO</span><h2>Decisões do Estado</h2><p>Você possui três ações por ano. Combine investimentos para criar efeitos de longo prazo.</p></div><div class="action-counter" id="actionCount">3 ações</div></div>
+ <div class="page-title"><div><span class="eyebrow">CENTRO DE COMANDO</span><h2>Decisões do Estado</h2><p>Você possui <b>5 pontos de ação (AP)</b> por ano. Ações complexas podem custar 2 AP; você decide quando avançar o calendário.</p></div><div class="action-counter" id="actionCount">5 AP</div></div>
  <div id="actionGrid" class="action-grid"></div>
  <div class="intel-strip"><div><span>EVENTO RECENTE</span><b id="latestEvent">Nenhum evento registrado.</b></div><button id="reportBtn">📑 Relatório do round</button></div>
 </section>
@@ -63,18 +85,30 @@
 </section>
 
 <section id="mapa" class="panel-page">
- <div class="page-title"><div><span class="eyebrow">TEATRO ATLÂNTICO</span><h2>Mapa estratégico</h2><p>Selecione uma região para inspecionar oportunidades, influência e tensão.</p></div><div class="pill">MAPA DINÂMICO</div></div>
+ <div class="page-title"><div><span class="eyebrow">TEATRO ATLÂNTICO</span><h2>Mapa estratégico</h2><p>Selecione uma região para inspecionar oportunidades, influência e tensão.</p></div><div class="pill">MAPA DINÂMICO • POTÊNCIAS E ROTAS</div></div>
  <div class="map-layout">
-   <div class="map-board" id="mapBoard">
-     <div class="ocean-label">ATLÂNTICO</div>
-     <button class="map-node upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span></button>
-     <button class="map-node brazil" data-region="brasil">🇧🇷<span>BRASIL</span></button>
-     <button class="map-node europe" data-region="europa">⚓<span>EUROPA</span></button>
-     <button class="map-node africa" data-region="africa">🌍<span>ÁFRICA</span></button>
-     <button class="map-node asia" data-region="asia">🏯<span>ÁSIA</span></button>
-     <div class="route r1"></div><div class="route r2"></div><div class="route r3"></div>
-   </div>
-   <div class="card region-card" id="regionInfo"></div>
+   <div class="map-board world-map" id="mapBoard">
+ <div class="map-grid"></div>
+ <svg class="world-svg" viewBox="0 0 1000 520">
+  <path class="land" d="M60 85 135 55 205 75 240 125 205 165 165 150 130 190 92 165 60 180 38 135Z"/>
+  <path class="land" d="M205 205 250 220 270 270 248 325 220 390 190 415 168 370 184 320 165 270Z"/>
+  <path class="land" d="M455 82 510 62 575 76 605 110 570 138 520 125 480 145 442 120Z"/>
+  <path class="land" d="M505 150 552 148 588 190 572 245 535 282 515 330 485 312 475 260 455 225 470 180Z"/>
+  <path class="land" d="M595 102 650 88 700 112 738 150 720 185 675 180 642 205 615 178Z"/>
+  <path class="land" d="M705 92 790 82 865 102 920 135 900 160 825 150 770 135 720 140Z"/>
+  <path class="land" d="M760 175 825 180 870 215 850 255 805 260 775 235 740 225Z"/>
+  <path class="land" d="M875 365 930 375 950 400 925 420 875 415 850 395Z"/>
+ </svg>
+ <div class="map-label atl">ATLÂNTICO</div>
+ <button class="map-node world upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span></button>
+ <button class="map-node world brazil" data-region="brasil">🇧🇷<span>BRASIL</span></button>
+ <button class="map-node world europe" data-region="europa">⚓<span>EUROPA</span></button>
+ <button class="map-node world africa" data-region="africa">🌍<span>ÁFRICA</span></button>
+ <button class="map-node world asia" data-region="asia">🏯<span>ÁSIA</span></button>
+ <button class="map-node world caribbean" data-region="caribe">🏝️<span>CARIBE</span></button>
+ <div class="map-route mr1"></div><div class="map-route mr2"></div>
+</div>
+<div class="card region-card" id="regionInfo"></div>
  </div>
 </section>
 
@@ -97,7 +131,11 @@
 
 <section id="diplomacia" class="panel-page">
  <div class="page-title"><div><span class="eyebrow">RELAÇÕES EXTERNAS</span><h2>Diplomacia</h2><p>Construa alianças, comércio e cooperação científica — ou administre rivalidades.</p></div></div>
- <div id="diplomacyGrid" class="diplomacy-grid"></div>
+ <div class="card diplomacy-actions"><h3>Tratados e relações</h3><div class="treaty-row">
+<button id="tradeTreaty">🤝 Comercial <small>1 AP</small></button><button id="scienceTreaty">🔬 Científico <small>1 AP</small></button><button id="nonAggression">🕊️ Não agressão <small>1 AP</small></button>
+<button id="allianceBtn" class="gold-btn">🛡️ Formar aliança <small>2 AP</small></button><button id="tradeRouteBtn">🚢 Abrir rota comercial <small>1 AP</small></button>
+</div><p class="hint">Selecione o alvo no painel Estratégia. Alianças exigem confiança e boa atitude.</p></div>
+<div id="diplomacyGrid" class="diplomacy-grid"></div>
 </section>
 
 <section id="historia" class="panel-page">

@@ -580,3 +580,61 @@ main{padding:0 22px}
 .economy-flow small{color:#b8ae91}.resource{min-height:100px}.map-background{background-image:linear-gradient(rgba(8,20,15,.16),rgba(8,20,15,.16)),url('assets/world-map-bg.png');background-size:cover;background-position:center;opacity:.26;mix-blend-mode:screen}
 @media (min-width:721px) and (max-width:1100px){body{font-size:14px}.page-title h2{font-size:25px}.map-board{min-height:500px}.map-node.world{width:76px;height:76px;font-size:9px}.metric b{font-size:16px}.action h3,.tech h3,.dip h3{font-size:15px}}
 @media (max-width:720px){.treaty-tags,.war-mini,.cooldown-mini{font-size:8px}.map-background{opacity:.2}.page-title h2{font-size:22px}}
+
+/* =========================================================
+   V12 — TABLET / ATLAS / LEGIBILIDADE / MAPA INTERATIVO
+   ========================================================= */
+:root{--map-pan-x:0px;--map-pan-y:0px;--map-scale-v12:1}
+.map-board{touch-action:none;cursor:grab;overscroll-behavior:contain}
+.map-board.is-panning{cursor:grabbing}
+.map-board .map-background{transform:translate(var(--map-pan-x),var(--map-pan-y)) scale(var(--map-scale-v12));transform-origin:center;transition:transform .18s ease}
+.map-board .world-svg{transform:translate(var(--map-pan-x),var(--map-pan-y)) scale(calc(var(--map-scale-v12) * var(--map-scale,1)));transform-origin:center;transition:transform .18s ease}
+.map-board .map-label,.map-board .map-node.world,.map-board .map-route{--pX:var(--map-pan-x);--pY:var(--map-pan-y)}
+.map-board .map-label{transform:translate(var(--pX),var(--pY))}
+.map-board .map-route{transform:translate(var(--pX),var(--pY)) rotate(var(--route-rot,0deg));transform-origin:left center}
+.map-board .map-node.world{transform:translate(var(--pX),var(--pY)) scale(var(--node-scale,1));transform-origin:center}
+.map-board .map-node.world:hover{transform:translate(var(--pX),var(--pY)) scale(calc(var(--node-scale,1) * 1.06))}
+.map-board[data-mode="routes"] .map-route{animation:routePulse 1.6s linear infinite}
+.map-board .map-frame-title,.map-board .map-zoom,.map-board .map-compass,.map-board .map-legend,.map-board .map-hint{transform:none}
+.map-board .map-zoom b{min-width:30px;text-align:center}
+.map-board[data-mode="political"] .map-node.world{border-color:#e0bd66}
+.map-board[data-mode="resources"] .map-node.world{background:#203225}
+
+/* Tablet/iPad: o Atlas é a peça principal e ocupa toda a largura disponível. */
+@media (min-width:721px) and (max-width:1100px){
+  .app-shell{max-width:100%;}
+  main{padding:0 14px}
+  .map-layout{grid-template-columns:1fr;gap:12px}
+  .map-board.world-map{width:100%;height:min(68vw,620px)!important;min-height:520px}
+  .region-card{width:100%;display:grid;grid-template-columns:1.35fr .8fr;column-gap:16px;align-items:start}
+  .region-card .map-info-head{grid-column:1}
+  .region-card .region-seal{grid-column:2;grid-row:1 / span 2}
+  .region-card .map-mode-note,.region-card .map-facts,.region-card .map-actions,.region-card .hint{grid-column:1 / -1}
+  .map-node.world{--node-scale:.94}
+  .map-node.world span{font-size:clamp(9px,1.05vw,12px)}
+  .map-node.world small{font-size:clamp(7px,.8vw,9px)}
+  .map-label{font-size:clamp(10px,1.2vw,14px)}
+  .page-title h2{font-size:clamp(24px,3vw,30px)}
+  .page-title p{font-size:clamp(11px,1.3vw,13px)}
+  .tab{font-size:11px}
+}
+
+/* iPad portrait e telas estreitas: mais área vertical, menos ruído. */
+@media (min-width:721px) and (max-width:900px){
+  .metrics{grid-template-columns:repeat(4,1fr)}
+  .map-board.world-map{height:min(72vw,600px)!important;min-height:500px}
+  .region-card{grid-template-columns:1fr}
+  .region-card .region-seal{grid-column:1;grid-row:auto}
+}
+
+/* Celular mantém o mapa utilizável, sem sacrificar os controles de toque. */
+@media (max-width:720px){
+  .map-layout{grid-template-columns:1fr}
+  .map-board.world-map{width:100%;height:min(92vw,500px)!important;min-height:390px}
+  .map-board .map-hint{font-size:8px;max-width:74%}
+  .map-node.world{--node-scale:.9}
+  .map-label{font-size:clamp(7px,2.1vw,10px)!important}
+}
+
+/* V12 — preserva ângulos das rotas ao aplicar deslocamento */
+.map-board .mr1{--route-rot:-23deg}.map-board .mr2{--route-rot:24deg}.map-board .mr3{--route-rot:-28deg}.map-board .mr4{--route-rot:12deg}

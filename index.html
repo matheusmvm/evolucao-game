@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu V11 — Grand Strategy Histórico</title>
+<title>Upaon-Açu V12 — Grand Strategy Histórico</title>
 <link rel="stylesheet" href="style.css?v=9.1">
 </head>
 <body>
@@ -33,14 +33,14 @@
   </div>
   <div id="startPreview" class="setup-preview"></div>
   <button id="startGame" class="start-btn">▶ INICIAR CAMPANHA</button>
-  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V11 preserva as correções anteriores e reforça história, geopolítica, economia, tecnologia e estabilidade das mecânicas.</p>
+  <p class="start-note">A época altera tecnologia, população, economia e contexto inicial. V12 preserva as correções anteriores e reforça história, geopolítica, economia, tecnologia e estabilidade das mecânicas.</p>
  </div>
 </div>
 <div class="app-shell">
 <header class="topbar">
   <div class="brand-wrap">
     <div class="logo-mark" id="logoMark">🌴</div>
-    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V11 • História • Ciência • Geopolítica</div></div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V12 • História • Ciência • Geopolítica</div></div>
   </div>
   <div class="top-controls">
     <span class="save-state" id="saveState">● campanha local</span>
@@ -105,7 +105,7 @@
  <div class="map-layout">
    <div class="map-board world-map" id="mapBoard">
  <div class="map-grid"></div><div class="map-background" aria-hidden="true"></div>
- <div class="map-frame-title"><span>ATLAS MUNDI</span><small>projeção estratégica • norte ↑</small></div><div class="map-zoom"><button id="mapZoomOut" aria-label="Diminuir mapa">−</button><b>MAPA</b><button id="mapReset" aria-label="Resetar mapa">1×</button><button id="mapZoomIn" aria-label="Aumentar mapa">+</button></div>
+ <div class="map-frame-title"><span>ATLAS MUNDI</span><small>projeção estratégica • norte ↑</small></div><div class="map-zoom"><button id="mapZoomOut" aria-label="Diminuir mapa">−</button><b id="mapZoomLabel">1×</b><button id="mapReset" aria-label="Resetar mapa">1×</button><button id="mapZoomIn" aria-label="Aumentar mapa">+</button></div>
  <div class="map-compass">N<br><b>✦</b></div>
  <svg class="world-svg" viewBox="0 0 1000 520" role="img" aria-label="Mapa estratégico vintage do mundo">
   <defs><pattern id="paperGrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#79a994" stroke-opacity=".12"/></pattern></defs>
@@ -136,7 +136,7 @@
  <button class="map-node world andes" data-region="andes">⛰️<span>ANDES</span><small>altitude</small></button>
  <button class="map-node world oceania" data-region="oceania">🌊<span>OCEANIA</span><small>ilhas</small></button>
  <div class="map-route mr1"></div><div class="map-route mr2"></div><div class="map-route mr3"></div><div class="map-route mr4"></div>
- <div class="map-legend"><span><i class="legend-dot player"></i> sua civilização</span><span><i class="legend-dot power"></i> potência</span><span><i class="legend-line"></i> rota</span><span><i class="legend-square"></i> recursos</span></div><div class="map-hint">Clique em uma região para inspecionar • use as camadas para mudar o foco</div>
+ <div class="map-legend"><span><i class="legend-dot player"></i> sua civilização</span><span><i class="legend-dot power"></i> potência</span><span><i class="legend-line"></i> rota</span><span><i class="legend-square"></i> recursos</span></div><div class="map-hint">Toque/clique em uma região para inspecionar • arraste para deslocar • use + / − para zoom</div>
 </div>
 </div>
 <div class="card region-card" id="regionInfo"></div>
@@ -180,6 +180,6 @@
 </aside>
 <div id="toast" class="toast"></div>
 </div>
-<script src="script.js?v=11.0"></script>
+<script src="script.js?v=12.0"></script>
 </body>
 </html>

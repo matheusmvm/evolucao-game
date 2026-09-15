@@ -457,3 +457,30 @@ main{padding:0 22px}
 @media(min-width:721px) and (max-width:1050px){.map-board{height:540px!important}.map-node.world{width:90px;height:76px}.map-node.world span{font-size:9px}.metric .value{font-size:20px}.page-title h2{font-size:26px;}}
 @media(max-width:720px){.map-board{height:480px!important;min-height:0}.map-node.world{width:72px;height:64px}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-node.world.upaon{left:20%;top:53%}.map-node.world.brazil{left:11%;top:69%}.map-node.world.caribbean{left:22%;top:37%}.map-node.world.iberia{left:48%;top:25%}.map-node.world.europe{left:45%;top:18%}.map-node.world.maghreb{left:51%;top:34%}.map-node.world.africa{left:47%;top:53%}.map-node.world.india{left:64%;top:43%}.map-node.world.asia{left:71%;top:29%}.dip-target{align-items:stretch;flex-direction:column;gap:5px}.dip-target select{width:100%;font-size:13px}.map-label{font-size:10px;letter-spacing:2px}.map-board::after{font-size:9px;bottom:9px;left:12px}}
 @media(max-width:480px){.map-board{height:430px!important}.map-node.world{width:66px;height:58px}.map-node.world span{font-size:7px}.map-node.world small{font-size:6px}.metric .value{font-size:17px}.metric .label{font-size:8px}.tab{font-size:10px}.page-title h2{font-size:22px}}
+
+/* =========================================================
+   V9 — HISTÓRIA EM CAMADAS / ATLAS DE TABULEIRO
+   ========================================================= */
+.research-ledger{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px}
+.research-card{background:linear-gradient(145deg,#273225,#141c16);border:2px solid #6f5b39;border-radius:5px;padding:11px;box-shadow:inset 0 0 0 1px rgba(238,207,139,.05)}
+.research-card span{display:block;font-size:8px;letter-spacing:1.2px;color:#c8b584}.research-card b{display:block;font-family:Georgia,serif;color:#f0d486;font-size:21px;margin:3px 0}.research-card small{display:block;color:#a9ae96;font-size:8px;line-height:1.4}
+.tech.available{border-color:#b08a45;box-shadow:0 0 0 1px rgba(217,181,90,.16),inset 0 0 24px rgba(197,163,84,.05)}
+.tech.available .research-btn{background:linear-gradient(#9c7b42,#6f552b);color:#fff4d1;border-color:#d7b96c;box-shadow:0 3px 0 #302518}
+.tech-chain{flex-wrap:wrap}.tech-chain span:last-child{max-width:100%;white-space:normal}
+.institution-intro{margin-bottom:12px;border-color:#765f38;color:#c8b98f;background:linear-gradient(145deg,#202a21,#111a14)}
+.institution-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.institution{display:grid;grid-template-columns:58px 1fr;gap:12px;padding:14px;background:linear-gradient(145deg,#202a21,#111a14);border:2px solid #625237;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(233,204,137,.04)}
+.institution.owned{border-color:#76935f}.institution.locked{opacity:.62}.institution-icon{width:52px;height:52px;display:grid;place-items:center;border:2px solid #80683d;background:#162018;font-size:27px;box-shadow:3px 3px 0 #0a0e0b}.institution h3{font-family:Georgia,serif;color:#eed79e;margin:3px 0 5px}.institution p{margin:0 0 8px}.institution .cat{color:#c7b278;font-size:8px;letter-spacing:1px}.institution-req,.institution-effect{font-size:8px;color:#aaa98d;padding:6px;border:1px solid #514a37;background:#151d17;margin-top:5px}.institution-effect{color:#d7c48b}.institution-btn{margin-top:9px;width:100%;background:linear-gradient(#3a563e,#263d2b);border-color:#71885b;color:#e5d4a2}.owned-label{display:inline-block;margin-top:9px;color:#8fbd7a;font-size:9px;letter-spacing:1px}
+.dip.at-war{border-color:#8e534a}.route-mini{margin-top:8px;padding:7px;border-top:1px dashed #67593d;color:#cdbb88;font-size:8px}
+@media(max-width:900px){.research-ledger{grid-template-columns:1fr}.institution-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.research-card b{font-size:18px}.institution{grid-template-columns:44px 1fr;padding:10px}.institution-icon{width:40px;height:40px;font-size:20px}.research-ledger{gap:7px}}
+/* V9 Atlas refinements */
+.map-label.eu{left:54%;top:22%}.map-label.af{left:53%;top:49%}.map-label.as{left:72%;top:25%}.map-label.ams{left:21%;top:59%}
+.map-node.world.northam{left:28%;top:20%}.map-node.world.meso{left:30%;top:37%}.map-node.world.andes{left:35%;top:61%}.map-node.world.oceania{left:80%;top:67%}
+.map-node.world.northam,.map-node.world.meso,.map-node.world.andes,.map-node.world.oceania{width:88px;height:66px}
+.map-node.world.northam:hover,.map-node.world.meso:hover,.map-node.world.andes:hover,.map-node.world.oceania:hover{box-shadow:0 0 0 2px #f1cc68,0 0 24px rgba(241,204,104,.18)}
+.world-map{background:radial-gradient(circle at 50% 42%,#1b4d62 0,#0d3040 52%,#071f2b 100%)!important}
+.world-svg .land{shape-rendering:geometricPrecision}
+@media(min-width:1100px){body{font-size:14px}.tabs .tab{font-size:11px}.action h3,.card h3{letter-spacing:.1px}.map-node.world span{font-size:10px}.map-node.world small{font-size:8px}}
+@media(min-width:700px) and (max-width:1100px){body{font-size:13px}.tabs .tab{font-size:10px}.map-node.world{transform:scale(.92)}.map-node.world:hover{transform:scale(1.01)}}
+@media(max-width:600px){body{font-size:12px}.page-title h2{font-size:24px}.map-node.world{transform:scale(.78);transform-origin:center}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-label{font-size:8px!important}}

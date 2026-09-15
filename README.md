@@ -1,17 +1,21 @@
-# Upaon-Açu V8.1
+# Upaon-Açu V9 — Grand Strategy Histórico
 
-Atualização visual e de jogabilidade sobre a V8.
+V9 preserva as correções e sistemas da V8.1 e amplia o jogo com uma camada histórica e geopolítica causal.
 
-## V8.1
-- Atlas Mundi com estética mais cartográfica e melhor hierarquia visual.
-- Coordenadas dos nós do mapa corrigidas, incluindo a Índia próxima ao sul da Ásia.
-- Escala tipográfica adaptativa para notebook, tablet e celular.
-- Alvo diplomático separado do alvo militar/inteligência.
-- Rotas comerciais passam a ser entidades persistentes, com nível, manutenção e interrupção por guerra.
-- Evita duplicar rotas comerciais com o mesmo parceiro.
-- Tratado de não agressão pode negociar paz durante uma guerra.
-- Compatibilidade de carregamento com saves anteriores mantida na estrutura; V8.1 usa chave própria.
-- Mantidos 5 AP, mapa interativo, povos, tecnologia causal, diplomacia, guerra, espionagem, economia, população, cidades, censos, eventos, histórico e save local.
+## Novidades
+- 5 Pontos de Ação por ano preservados.
+- Mapa/Atlas com novas regiões interativas e camadas estratégicas.
+- Povos e tradições culturais preservados e usados para bônus de pesquisa.
+- Árvore tecnológica causal com ano mínimo, pré-requisitos, custos de pesquisa e desbloqueios.
+- Pesquisa tecnológica realmente executável com AP + Pontos de Pesquisa.
+- Projetos dependentes de tecnologia: navios, geradores, aeronaves e computadores.
+- Instituições: Conselho de Estado, Academia de Ciências, Corporações de Ofício, Casa de Navegação, Banco Público, Estado-Maior e Serviço de Comunicações.
+- Diplomacia com índice relacional derivado de atitude, confiança, comércio, influência e tensão.
+- Rotas comerciais persistentes com nível, capacidade, lucro, produto e risco.
+- Rotas interrompidas por guerra e sujeitas a eventos logísticos.
+- Migração de saves V8.1 para V9.
+- Identidade visual vintage/indie de tabuleiro preservada e refinada.
+- Responsividade para notebook, tablet e celular.
 
 ## Publicação
-Envie `index.html`, `style.css` e `script.js` para o GitHub Pages.
+Envie `index.html`, `style.css` e `script.js` para um repositório público com GitHub Pages. Não há backend nem dependências externas.

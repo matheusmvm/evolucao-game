@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081711">
-<title>Upaon-Açu V8 — Grand Strategy Vintage</title>
-<link rel="stylesheet" href="style.css?v=8.0">
+<title>Upaon-Açu V9 — Grand Strategy Histórico</title>
+<link rel="stylesheet" href="style.css?v=9.0">
 </head>
 <body>
 <div id="startScreen" class="start-screen">
@@ -40,7 +40,7 @@
 <header class="topbar">
   <div class="brand-wrap">
     <div class="logo-mark" id="logoMark">🌴</div>
-    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V8 • História • Ciência • Geopolítica</div></div>
+    <div><div class="brand">UPAON-AÇU</div><div class="tagline">Grand Strategy • V9 • História • Ciência • Geopolítica</div></div>
   </div>
   <div class="top-controls">
     <span class="save-state" id="saveState">● campanha local</span>
@@ -66,6 +66,7 @@
 <nav class="tabs">
  <button class="tab active" data-tab="estado">🏛️ Estado</button>
  <button class="tab" data-tab="tecnologia">🔬 Tecnologia</button>
+ <button class="tab" data-tab="instituicoes">🏛️ Instituições</button>
  <button class="tab" data-tab="economia">💰 Economia</button>
  <button class="tab" data-tab="mapa">🗺️ Mapa</button>
  <button class="tab" data-tab="populacao">👥 Sociedade</button>
@@ -82,8 +83,14 @@
 </section>
 
 <section id="tecnologia" class="panel-page">
- <div class="page-title"><div><span class="eyebrow">FRONTEIRA DO CONHECIMENTO</span><h2>Árvore tecnológica</h2><p>Avance por eras e crie especializações próprias.</p></div></div>
- <div id="civilizationProfile" class="card civ-profile"></div><div class="tech-legend"><b>CADEIA CAUSAL</b><span>Uma tecnologia só pode ser pesquisada quando o ano e os pré-requisitos estiverem cumpridos.</span><span>🔬 Pesquisa = 1 AP • custo varia conforme a tradição cultural.</span><span>🔓 Tecnologias desbloqueiam projetos reais.</span></div><div id="techTree" class="tech-tree"></div>
+ <div class="page-title"><div><span class="eyebrow">FRONTEIRA DO CONHECIMENTO</span><h2>Árvore tecnológica</h2><p>Pesquise tecnologias em uma cadeia causal: pré-requisitos, ano mínimo e desbloqueios determinam o que sua civilização consegue construir.</p></div></div>
+ <div id="civilizationProfile" class="card civ-profile"></div><div class="research-ledger" id="researchLedger"></div><div class="tech-legend"><b>CADEIA CAUSAL</b><span>Uma tecnologia só pode ser pesquisada quando o ano e os pré-requisitos estiverem cumpridos.</span><span>🔬 Pesquisa = 1 AP • custo varia conforme a tradição cultural.</span><span>🔓 Tecnologias desbloqueiam projetos reais.</span></div><div id="techTree" class="tech-tree"></div>
+</section>
+
+<section id="instituicoes" class="panel-page">
+ <div class="page-title"><div><span class="eyebrow">ORGANIZAÇÃO DO ESTADO</span><h2>Instituições</h2><p>Instituições transformam conhecimento, população e recursos em capacidade estatal duradoura.</p></div><div class="pill" id="institutionSummary">0 instituições</div></div>
+ <div class="card institution-intro"><b>Princípio histórico:</b> instituições não são apenas bônus; elas alteram a forma como sua sociedade administra território, comércio, ciência e guerra. Algumas exigem tecnologias ou níveis de urbanização.</div>
+ <div id="institutionGrid" class="institution-grid"></div>
 </section>
 
 <section id="economia" class="panel-page">
@@ -114,7 +121,7 @@
   <path class="land island" d="M898 253 920 260 932 275 918 287 897 281 890 267Z"/>
   <g class="map-graticule"><ellipse cx="500" cy="260" rx="435" ry="205" fill="none"/><ellipse cx="500" cy="260" rx="320" ry="205" fill="none"/><path d="M70 260H930M500 55V465"/></g>
  </svg>
- <div class="map-label atl">ATLÂNTICO</div><div class="map-label pac">PACÍFICO</div><div class="map-label ind">ÍNDICO</div>
+ <div class="map-label atl">ATLÂNTICO</div><div class="map-label pac">PACÍFICO</div><div class="map-label ind">ÍNDICO</div><div class="map-label eu">EUROPA</div><div class="map-label af">ÁFRICA</div><div class="map-label as">ÁSIA</div><div class="map-label ams">AMÉRICA DO SUL</div>
  <button class="map-node world upaon selected" data-region="upaon">🌴<span>UPAON-AÇU</span><small>capital</small></button>
  <button class="map-node world brazil" data-region="brasil">🌎<span>BRASIL</span><small>continental</small></button>
  <button class="map-node world caribbean" data-region="caribe">🏝️<span>CARIBE</span><small>ilhas</small></button>
@@ -124,6 +131,10 @@
  <button class="map-node world maghreb" data-region="magrebe">☪<span>MAGREBE</span><small>mediterrâneo</small></button>
  <button class="map-node world india" data-region="india">◈<span>ÍNDIA</span><small>índico</small></button>
  <button class="map-node world asia" data-region="asia">🏯<span>CHINA</span><small>leste asiático</small></button>
+ <button class="map-node world northam" data-region="america_norte">🦅<span>AMÉRICA N.</span><small>povos e colônias</small></button>
+ <button class="map-node world meso" data-region="mesoamerica">☀️<span>MESOAMÉRICA</span><small>cidades</small></button>
+ <button class="map-node world andes" data-region="andes">⛰️<span>ANDES</span><small>altitude</small></button>
+ <button class="map-node world oceania" data-region="oceania">🌊<span>OCEANIA</span><small>ilhas</small></button>
  <div class="map-route mr1"></div><div class="map-route mr2"></div><div class="map-route mr3"></div><div class="map-route mr4"></div>
  <div class="map-legend"><span><i class="legend-dot player"></i> sua civilização</span><span><i class="legend-dot power"></i> potência</span><span><i class="legend-line"></i> rota</span><span><i class="legend-square"></i> recursos</span></div><div class="map-hint">Clique em uma região para inspecionar • use as camadas para mudar o foco</div>
 </div>
@@ -169,6 +180,6 @@
 </aside>
 <div id="toast" class="toast"></div>
 </div>
-<script src="script.js?v=6.1"></script>
+<script src="script.js?v=9.0"></script>
 </body>
 </html>

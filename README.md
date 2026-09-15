@@ -20,3 +20,12 @@ O jogo é estático e não precisa de backend. O progresso é salvo no navegador
 - Use as abas para consultar tecnologia, população, infraestrutura, forças armadas, diplomacia, panorama e história.
 - Faça censos e exercícios militares.
 - Salve e carregue a campanha no mesmo navegador.
+
+
+## Mecânicas estratégicas da versão 2
+
+- 3 ações por round, acumuladas em uma fila antes de avançar o ano.
+- Operações estratégicas de ataque e espionagem contra nações monitoradas.
+- Resolução abstrata de conflitos baseada nos indicadores do Estado.
+- Panorama global automático ao final de cada round.
+- Potências estrangeiras com economia, ciência, estabilidade, poder militar e atitude dinâmica.

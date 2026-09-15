@@ -10,7 +10,7 @@ const initial = {
   year:1460, round:1, population:18000, urban:7, territory:1, stability:72,
   economy:38, science:8, industry:12, technology:5, military:7, diplomacy:18,
   education:9, health:8, energy:3, infrastructure:8, readiness:18,
-  actionUsed:false, selectedAction:null, lastReport:null, censuses:[],
+  actionUsed:false, actionsLeft:3, selectedActions:[], selectedAction:null, lastReport:null, lastGlobal:null, censuses:[],
   history:[{year:1460,text:"Fundação e centralização de Upaon-Açu."}],
   tech:{
     mecanica:0, eletricidade:0, automacao:0, controle:0, computacao:0, programacao:0,
@@ -19,6 +19,16 @@ const initial = {
   },
   workforce:{agro:48,pesca:12,construcao:8,minera:4,manufatura:15,industria:3,navegacao:3,servicos:4,ciencia:1,outros:2},
   cities:{saoLuis:{name:"São Luís",pop:12000,industry:8,infra:14,science:8,port:20,education:10,health:8}},
+  nations:{
+    portugal:{name:"Portugal",military:28,economy:48,science:42,stability:68,attitude:18},
+    espanha:{name:"Espanha",military:32,economy:52,science:40,stability:64,attitude:12},
+    franca:{name:"França",military:36,economy:55,science:58,stability:65,attitude:24},
+    holanda:{name:"Holanda",military:25,economy:60,science:50,stability:70,attitude:22},
+    inglaterra:{name:"Inglaterra",military:42,economy:64,science:55,stability:67,attitude:18},
+    china:{name:"China",military:44,economy:70,science:48,stability:72,attitude:10},
+    india:{name:"Índia",military:30,economy:58,science:52,stability:62,attitude:14},
+    magrebe:{name:"Magrebe",military:24,economy:38,science:35,stability:60,attitude:26}
+  },
   diplomacy:{
     portugal:{name:"Portugal",trust:20,trade:18,tension:15,science:3},
     espanha:{name:"Espanha",trust:15,trade:10,tension:20,science:2},
@@ -47,7 +57,9 @@ const actions = [
  {id:"aero",icon:"✈️",cat:"Aeronáutica",name:"Pesquisa aeronáutica",desc:"Pesquisa aerostática, aerodinâmica e controle de voo quando possível.",cost:"Custo: economia −4",apply(){S.science+=3;S.technology+=4;S.tech.aeronautica+=1;S.tech.aerodinamica+=.5;S.industry+=2;S.economy-=4}},
  {id:"compute",icon:"💻",cat:"Computação",name:"Laboratório de informação",desc:"Máquinas de cálculo, codificação e processamento de dados.",cost:"Custo: economia −4",apply(){S.science+=3;S.technology+=5;S.tech.computacao+=1;S.tech.dados+=1;S.tech.programacao+=.5;S.economy-=4}},
  {id:"mil",icon:"🪖",cat:"Militar",name:"Fortalecimento militar",desc:"Treinamento, logística e engenharia aumentam prontidão.",cost:"Custo: economia −3",apply(){S.military+=5;S.readiness+=8;S.economy-=3}},
- {id:"dip",icon:"🌎",cat:"Diplomacia",name:"Missão diplomática",desc:"Amplia relações comerciais, científicas e políticas.",cost:"Custo: economia −1",apply(){S.diplomacy+=7;S.economy+=3;Object.values(S.diplomacy).forEach(x=>x.trust=clamp(x.trust+2,0,100))}}
+ {id:"dip",icon:"🌎",cat:"Diplomacia",name:"Missão diplomática",desc:"Amplia relações comerciais, científicas e políticas.",cost:"Custo: economia −1",apply(){S.diplomacy+=7;S.economy+=3;Object.values(S.diplomacy).forEach(x=>x.trust=clamp(x.trust+2,0,100))}},
+ {id:"trade",icon:"🤝",cat:"Economia",name:"Acordo comercial",desc:"Aumenta comércio e receita, com efeito gradual.",cost:"Custo: economia −1",apply(){S.economy+=4;S.diplomacy+=2}},
+ {id:"census",icon:"📋",cat:"Estado",name:"Censo nacional",desc:"Registra a situação demográfica e melhora a qualidade administrativa.",cost:"Custo: estabilidade −1",apply(){doCensus(true);S.stability-=1}}
 ];
 
 const tech = [
@@ -112,12 +124,18 @@ function render(){
 }
 function renderActions(){
  const grid=document.getElementById("actionGrid");
- grid.innerHTML=actions.map(a=>`<button type="button" class="action ${S.selectedAction===a.id?"selected":""}" data-action="${a.id}" ${S.actionUsed?"disabled":""}>
+ const left=S.actionsLeft;
+ grid.innerHTML=actions.map(a=>`<button type="button" class="action" data-action="${a.id}" ${left<=0?"disabled":""}>
  <div class="icon">${a.icon}</div><div class="muted">${a.cat}</div><h3>${a.name}</h3><p>${a.desc}</p><div class="cost">${a.cost}</div></button>`).join("");
- document.getElementById("actionCount").textContent=S.actionUsed?"Ação escolhida":"1 ação disponível";
+ document.getElementById("actionCount").textContent=`${left} ${left===1?"ação":"ações"} disponíveis`;
  grid.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
-   if(S.actionUsed)return;
-   S.selectedAction=b.dataset.action;S.actionUsed=true;render();toast("Ação selecionada. Clique em PRÓXIMO ROUND para executá-la.");
+   if(S.actionsLeft<=0)return;
+   const a=actions.find(x=>x.id===b.dataset.action); if(!a)return;
+   S.selectedActions.push(a.id);
+   S.actionsLeft--;
+   // Actions are committed when the round advances.
+   render();
+   toast(`${a.name} adicionada à fila (${S.actionsLeft} restantes).`);
  }));
 }
 function renderTech(){
@@ -148,12 +166,57 @@ function renderInfra(){
 function renderMilitary(){
  const vals=[["Exército",S.military*.75],["Marinha",S.military*.7],["Aviação",S.tech.aeronautica*7],["Submersíveis",S.tech.submersiveis*7],["Prontidão",S.readiness]];
  document.getElementById("militaryStats").innerHTML=vals.map(x=>`<div class="mil-card"><span>${x[0]}</span><b>${Math.round(clamp(x[1],0,100))}</b></div>`).join("");
+ const nationEntries=Object.entries(S.nations);
+ const opts=nationEntries.map(([id,n])=>`<option value="${id}">${n.name}</option>`).join("");
+ document.getElementById("attackTarget").innerHTML=opts;
+ document.getElementById("spyTarget").innerHTML=opts;
+ document.getElementById("attackBtn").disabled=S.actionsLeft<=0;
+ document.getElementById("spyBtn").disabled=S.actionsLeft<=0;
  const ex=[["🏋️","Exercício terrestre",()=>{S.readiness+=5;S.military+=1}],
  ["⚓","Exercício naval",()=>{S.readiness+=4;S.military+=1;S.tech.naval+=.3}],
  ["✈️","Exercício aéreo",()=>{S.readiness+=3;S.military+=.5;S.tech.aeronautica+=.2}],
  ["📡","Exercício de comunicação",()=>{S.readiness+=3;S.tech.semfio+=.3;S.tech.controle+=.2}]];
- document.getElementById("exerciseGrid").innerHTML=ex.map((x,i)=>`<button type="button" class="action" data-ex="${i}"><div class="icon">${x[0]}</div><h3>${x[1]}</h3><p>Aumenta prontidão e experiência sem iniciar guerra.</p></button>`).join("");
- document.querySelectorAll("[data-ex]").forEach(b=>b.addEventListener("click",()=>{ex[+b.dataset.ex][2]();clampAll();render();toast("Exercício concluído.")}));
+ document.getElementById("exerciseGrid").innerHTML=ex.map((x,i)=>`<button type="button" class="action" data-ex="${i}" ${S.actionsLeft<=0?"disabled":""}><div class="icon">${x[0]}</div><h3>${x[1]}</h3><p>Aumenta prontidão e experiência sem iniciar guerra.</p></button>`).join("");
+ document.querySelectorAll("[data-ex]").forEach(b=>b.addEventListener("click",()=>{
+   if(S.actionsLeft<=0)return;
+   ex[+b.dataset.ex][2]();S.actionsLeft--;clampAll();render();toast("Exercício concluído e uma ação foi consumida.");
+ }));
+}
+function strategicAttack(){
+ if(S.actionsLeft<=0){toast("Não há ações restantes neste round.");return}
+ const id=document.getElementById("attackTarget").value, n=S.nations[id];
+ if(!n)return;
+ const ours=S.military + S.tech.sistemas*2 + S.tech.controle*1.5;
+ const theirs=n.military + n.stability*.25 + Math.random()*18;
+ const ratio=ours/Math.max(1,theirs);
+ S.actionsLeft--;
+ if(ratio>1.25){
+   S.military=clamp(S.military-2,0,100);S.economy=clamp(S.economy-2,0,100);
+   n.military=clamp(n.military-5,0,100);n.stability=clamp(n.stability-4,0,100);
+   S.diplomacy=clamp(S.diplomacy-5,0,100);
+   n.attitude=clamp(n.attitude-12,-100,100);
+   S.history.push({year:S.year,text:`Conflito com ${n.name}: Upaon-Açu obteve vantagem estratégica.`});
+   toast(`Ataque contra ${n.name}: vantagem de Upaon-Açu.`);
+ }else{
+   S.military=clamp(S.military-4,0,100);S.economy=clamp(S.economy-4,0,100);
+   n.military=clamp(n.military-2,0,100);n.attitude=clamp(n.attitude-18,-100,100);
+   S.stability=clamp(S.stability-5,0,100);S.diplomacy=clamp(S.diplomacy-8,0,100);
+   S.history.push({year:S.year,text:`Conflito com ${n.name}: a ofensiva não alcançou o objetivo esperado.`});
+   toast(`Ataque contra ${n.name}: resultado desfavorável.`);
+ }
+ clampAll();render();
+}
+function espionage(){
+ if(S.actionsLeft<=0){toast("Não há ações restantes neste round.");return}
+ const id=document.getElementById("spyTarget").value,n=S.nations[id];
+ if(!n)return;
+ S.actionsLeft--;
+ const intel=clamp(S.science*.45+S.tech.dados*4+S.tech.semfio*3+Math.random()*25,0,100);
+ const detected=Math.random()*100 > intel;
+ S.history.push({year:S.year,text:detected?`Espionagem contra ${n.name}: operação discreta sem detecção confirmada.`:`Espionagem contra ${n.name}: atividade detectada, causando tensão diplomática.`});
+ if(detected){n.tension=clamp((n.tension||20)+10,0,100);n.attitude=clamp(n.attitude-5,-100,100);S.diplomacy=clamp(S.diplomacy-3,0,100);toast(`Informações obtidas sobre ${n.name}, mas houve sinais de detecção.`)}
+ else{n.military=clamp(n.military,0,100);S.science+=2;S.technology+=1;toast(`Inteligência obtida sobre ${n.name}.`)}
+ clampAll();render();
 }
 function renderDiplomacy(){
  document.getElementById("diplomacyGrid").innerHTML=Object.entries(S.diplomacy).map(([id,d])=>`<div class="dip"><h3>${d.name}</h3><div class="relation">Confiança ${Math.round(d.trust)}/100</div><div class="row"><span>Comércio</span><b>${Math.round(d.trade)}</b></div><div class="row"><span>Tensão</span><b>${Math.round(d.tension)}</b></div><div class="row"><span>Ciência</span><b>${Math.round(d.science)}</b></div><button type="button" data-dip="${id}" class="secondary">Enviar missão</button></div>`).join("");
@@ -163,19 +226,21 @@ function renderDiplomacy(){
 }
 function renderPanorama(){
  const global=[
- `Europa: competição marítima e comercial aumenta conforme o século avança.`,
+ `Europa: competição marítima, comercial e científica continua se intensificando.`,
  `África: redes comerciais e diplomáticas ganham importância no Atlântico.`,
- `Ásia: centros de ciência e comércio permanecem relevantes para a economia mundial.`,
+ `Ásia: grandes centros econômicos e científicos seguem influentes.`,
  `Atlântico: Upaon-Açu amplia sua presença através de portos, ciência e diplomacia.`
  ];
  const brazil=[
  `Bahia: grande centro regional de comércio e população.`,
  `Pernambuco: eixo agrícola e marítimo estratégico.`,
  `Amazônia: rios e território oferecem oportunidades logísticas.`,
- `Nordeste: proximidade geográfica torna a região central para a estratégia de Upaon-Açu.`,
- `Sudeste: ainda distante do centro político da campanha, mas com potencial crescente.`
+ `Nordeste: proximidade geográfica mantém a região central para a estratégia.`,
+ `Sudeste: potencial econômico crescente no horizonte da campanha.`
  ];
- document.getElementById("global").innerHTML=global.map(x=>`<div class="row"><span>${x}</span></div>`).join("");
+ document.getElementById("global").innerHTML=global.map(x=>`<div class="row"><span>${x}</span></div>`).join("")+
+ `<div class="row"><span><b>Potências monitoradas</b></span></div>`+
+ Object.values(S.nations).map(n=>`<div class="row"><span>${n.name}</span><b>Mil ${Math.round(n.military)} • Econ ${Math.round(n.economy)}</b></div>`).join("");
  document.getElementById("brazil").innerHTML=brazil.map(x=>`<div class="row"><span>${x}</span></div>`).join("");
 }
 function renderHistory(){
@@ -190,10 +255,10 @@ function formatCensus(c){
  ["Rural",fmt(c.population*(1-c.urban/100))],["Ciência",Math.round(c.science)+"/100"],["Indústria",Math.round(c.industry)+"/100"],["Infraestrutura",Math.round(c.infrastructure)+"/100"]
  ].map(x=>`<div class="report-box"><small>${x[0]}</small><b>${x[1]}</b></div>`).join("")}</div>`;
 }
-function doCensus(){
+function doCensus(silent=false){
  const c={year:S.year,population:S.population,urban:S.urban,science:S.science,industry:S.industry,infrastructure:S.infrastructure};
  S.censuses.push(c);S.history.push({year:S.year,text:`Censo nacional realizado: ${fmt(S.population)} habitantes e ${S.urban.toFixed(1)}% de urbanização.`});
- render();toast("Censo realizado e arquivado.");
+ if(!silent){render();toast("Censo realizado e arquivado.");}
 }
 function chooseRandomEvent(){
  const pool=[
@@ -207,11 +272,23 @@ function chooseRandomEvent(){
  return pool[Math.floor(Math.random()*pool.length)];
 }
 function nextRound(){
- if(S.selectedAction){
-   const a=actions.find(x=>x.id===S.selectedAction);if(a)a.apply();
+ if(S.actionsLeft===3 && !S.selectedActions.length){
+   toast("Escolha pelo menos uma ação antes de avançar.");
+   return;
  }
+ const executed=[...S.selectedActions];
+ executed.forEach(id=>{const a=actions.find(x=>x.id===id);if(a)a.apply()});
  const event=chooseRandomEvent();event[2]();
- // Crescimento orgânico
+
+ // Pequenas mudanças autônomas nas potências monitoradas.
+ Object.values(S.nations).forEach(n=>{
+   n.economy=clamp(n.economy+(Math.random()-.35)*1.8,0,100);
+   n.science=clamp(n.science+(Math.random()-.2)*1.4,0,100);
+   n.stability=clamp(n.stability+(Math.random()-.5)*1.2,0,100);
+   n.military=clamp(n.military+(Math.random()-.35)*1.1,0,100);
+   n.attitude=clamp(n.attitude+(Math.random()-.5)*1.5,-100,100);
+ });
+
  const growth=0.008+(S.health*.00005)+(S.education*.000025);
  S.population*=1+growth;
  S.urban=clamp(S.urban+Math.max(.08,S.industry*.012+S.infrastructure*.003),0,95);
@@ -224,18 +301,30 @@ function nextRound(){
  S.infrastructure=clamp(S.infrastructure+S.industry*.004,0,100);
  S.health=clamp(S.health+S.education*.004-0.03,0,100);
  S.stability=clamp(S.stability+(S.health>25?0.1:-0.2),0,100);
- // Workforce migration
+
  S.workforce.industria=clamp(S.workforce.industria+0.12,0,45);
  S.workforce.agro=clamp(S.workforce.agro-0.10,8,60);
  S.workforce.ciencia=clamp(S.workforce.ciencia+(S.education>40?.04:.01),0,20);
  S.workforce.servicos=clamp(S.workforce.servicos+0.04,0,25);
- // City
- const c=S.cities.saoLuis;c.pop*=1+growth*1.2;c.industry=clamp(c.industry+S.industry*.01,0,100);c.infra=clamp(c.infra+S.infrastructure*.008,0,100);c.science=clamp(c.science+S.science*.005,0,100);c.education=clamp(c.education+S.education*.004,0,100);c.health=clamp(c.health+S.health*.004,0,100);
- S.year++;S.round++;S.actionUsed=false;S.selectedAction=null;
+
+ const c=S.cities.saoLuis;
+ c.pop*=1+growth*1.2;c.industry=clamp(c.industry+S.industry*.01,0,100);
+ c.infra=clamp(c.infra+S.infrastructure*.008,0,100);c.science=clamp(c.science+S.science*.005,0,100);
+ c.education=clamp(c.education+S.education*.004,0,100);c.health=clamp(c.health+S.health*.004,0,100);
+
+ S.year++;S.round++;S.actionsLeft=3;S.selectedActions=[];S.actionUsed=false;S.selectedAction=null;
  S.history.push({year:S.year,text:`${event[0]} — ${event[1]}`});
- S.lastReport={event:event[0],eventText:event[1],population:S.population,economy:S.economy,science:S.science,industry:S.industry,military:S.military,technology:S.technology};
- checkMilestones();
- clampAll();render();showReport();
+ S.lastGlobal=buildGlobalSnapshot();
+ S.lastReport={event:event[0],eventText:event[1],population:S.population,economy:S.economy,science:S.science,industry:S.industry,military:S.military,technology:S.technology,actions:executed.map(id=>actions.find(a=>a.id===id)?.name).filter(Boolean)};
+ checkMilestones();clampAll();render();showReport();
+}
+function buildGlobalSnapshot(){
+ const powers=Object.values(S.nations).map(n=>({name:n.name,military:Math.round(n.military),economy:Math.round(n.economy),science:Math.round(n.science),stability:Math.round(n.stability),attitude:Math.round(n.attitude)}));
+ return {
+   year:S.year,atlantic:`Presença de Upaon-Açu: ${Math.round(S.diplomacy)}/100`,
+   brazil:`Influência regional: ${Math.round((S.diplomacy+S.infrastructure+S.military)/3)}/100`,
+   powers
+ };
 }
 function checkMilestones(){
  for(const m of milestones){if(m[0]===S.year){S.history.push({year:S.year,text:`${m[1]} — ${m[2]}`})}}
@@ -247,7 +336,9 @@ function clampAll(){
 }
 function showReport(){
  const r=S.lastReport;if(!r)return;
+ const g=S.lastGlobal||buildGlobalSnapshot();
  document.getElementById("roundReport").innerHTML=`<h2>🌴 UPAON-AÇU — ROUND ${S.round}</h2><p class="muted">ANO ${S.year}</p>
+ <div class="panel"><h3>Decisões executadas</h3><p>${r.actions?.length?r.actions.map(x=>`• ${x}`).join("<br>"):"Nenhuma"}</p></div>
  <div class="panel"><h3>Evento do ano</h3><p><b>${r.event}</b></p><p class="muted">${r.eventText}</p></div>
  <div class="report-grid">
  <div class="report-box"><small>População</small><b>${fmt(r.population)}</b></div>
@@ -257,14 +348,22 @@ function showReport(){
  <div class="report-box"><small>Tecnologia</small><b>${Math.round(r.technology)}/100</b></div>
  <div class="report-box"><small>Poder militar</small><b>${Math.round(r.military)}/100</b></div>
  </div>
- <p class="muted">Escolha a próxima ação e avance novamente para continuar a campanha.</p>`;
+ <div class="panel"><h3>🌎 Panorama global — ${g.year}</h3>
+ <p class="muted">${g.atlantic} • ${g.brazil}</p>
+ ${g.powers.map(n=>`<div class="row"><span><b>${n.name}</b> <span class="muted">atitude ${n.attitude}</span></span><b>Mil ${n.military} • Econ ${n.economy} • Ciência ${n.science}</b></div>`).join("")}
+ </div>
+ <p class="muted">Você recuperou 3 ações para o próximo round. Escolha até três antes de avançar novamente.</p>`;
  document.getElementById("reportModal").classList.remove("hidden");
  document.getElementById("reportModal").setAttribute("aria-hidden","false");
 }
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove("show"),2200)}
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(S));toast("Jogo salvo neste navegador.")}
-function load(){try{const x=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(!x){toast("Nenhum save encontrado.");return}S=Object.assign(structuredClone(initial),x);clampAll();render();toast("Jogo carregado.")}catch(e){toast("Não foi possível carregar o save.")}}
-function newGame(){if(confirm("Começar uma nova campanha? O progresso atual será substituído na memória desta página.")){S=structuredClone(initial);render();toast("Nova campanha iniciada.")}}
+function load(){try{const x=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(!x){toast("Nenhum save encontrado.");return}S=Object.assign(structuredClone(initial),x);
+ S.actionsLeft=Number.isFinite(Number(S.actionsLeft))?clamp(Number(S.actionsLeft),0,3):3;
+ S.selectedActions=Array.isArray(S.selectedActions)?S.selectedActions:[];
+ S.nations=S.nations||structuredClone(initial.nations);
+ clampAll();render();toast("Jogo carregado.")}catch(e){toast("Não foi possível carregar o save.")}}
+function newGame(){if(confirm("Começar uma nova campanha? O progresso atual será substituído na memória desta página.")){S=structuredClone(initial);render();toast("Nova campanha iniciada com 3 ações por round.")}}
 function drawChart(){
  const c=document.getElementById("chart"),ctx=c.getContext("2d"),d=devicePixelRatio||1;
  const w=c.clientWidth||900,h=260;c.width=w*d;c.height=h*d;ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
@@ -283,6 +382,8 @@ document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
  b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active");if(b.dataset.tab==="populacao")drawChart();
 }));
 document.getElementById("nextRound").addEventListener("click",nextRound);
+document.getElementById("attackBtn").addEventListener("click",strategicAttack);
+document.getElementById("spyBtn").addEventListener("click",espionage);
 document.getElementById("censusBtn").addEventListener("click",doCensus);
 document.getElementById("saveBtn").addEventListener("click",save);
 document.getElementById("loadBtn").addEventListener("click",load);

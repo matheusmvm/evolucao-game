@@ -51,7 +51,7 @@
     <section id="decisoes" class="tab-panel active">
       <div class="section-head">
         <div><h2>Decisões do Estado</h2><p>Escolha uma ação por ano. O efeito é aplicado no próximo round.</p></div>
-        <div class="pill" id="actionCount">1 ação disponível</div>
+        <div class="pill" id="actionCount">3 ações disponíveis</div>
       </div>
       <div class="action-grid" id="actionGrid"></div>
     </section>
@@ -80,6 +80,22 @@
     <section id="militar" class="tab-panel">
       <div class="section-head"><div><h2>Forças armadas</h2><p>Exercícios aumentam prontidão sem iniciar guerras automaticamente.</p></div></div>
       <div id="militaryStats" class="mil-grid"></div>
+      <div class="panel">
+        <h3>Operações estratégicas</h3>
+        <div class="two-col">
+          <div>
+            <label class="muted" for="attackTarget">Alvo de ataque</label>
+            <select id="attackTarget" class="select"></select>
+            <button type="button" id="attackBtn" class="danger wide">⚔️ Iniciar ataque</button>
+          </div>
+          <div>
+            <label class="muted" for="spyTarget">Alvo de espionagem</label>
+            <select id="spyTarget" class="select"></select>
+            <button type="button" id="spyBtn" class="secondary wide">🕵️ Espionar</button>
+          </div>
+        </div>
+        <p class="muted">Operações consomem ações do round. O conflito é resolvido de forma abstrata por poder militar, estabilidade, diplomacia e tecnologia.</p>
+      </div>
       <div class="action-grid" id="exerciseGrid"></div>
     </section>
 

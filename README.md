@@ -39,3 +39,7 @@ A árvore tecnológica ganhou uma camada ancestral/neolítica com tecnologias co
 - A ação de rota do mapa usa o mesmo sistema da aba Diplomacia, evitando dois sistemas conflitantes.
 - Árvore ancestral recebeu Orientação celeste e ambiental para não exigir astronomia matemática formal antes da navegação.
 - Validação de sintaxe JavaScript executada com `node --check script.js`.
+
+
+## V13
+V13 adiciona foco nacional, objetivos de campanha, prestígio/legitimidade, pulso geopolítico, identidade visual renovada e background cartográfico local. Mantém 5 AP, mapa com zoom/pan, diplomacia, comércio, tecnologia causal, economia, guerra, população e migração de saves anteriores.

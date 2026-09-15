@@ -484,3 +484,78 @@ main{padding:0 22px}
 @media(min-width:1100px){body{font-size:14px}.tabs .tab{font-size:11px}.action h3,.card h3{letter-spacing:.1px}.map-node.world span{font-size:10px}.map-node.world small{font-size:8px}}
 @media(min-width:700px) and (max-width:1100px){body{font-size:13px}.tabs .tab{font-size:10px}.map-node.world{transform:scale(.92)}.map-node.world:hover{transform:scale(1.01)}}
 @media(max-width:600px){body{font-size:12px}.page-title h2{font-size:24px}.map-node.world{transform:scale(.78);transform-origin:center}.map-node.world span{font-size:8px}.map-node.world small{font-size:7px}.map-label{font-size:8px!important}}
+
+/* =========================================================
+   V9.1 — CORREÇÃO CARTOGRÁFICA / NÃO SOBREPOR RÓTULOS
+   ========================================================= */
+.world-map{position:relative;isolation:isolate}
+.world-svg{z-index:0;pointer-events:none}
+.map-label{z-index:1;pointer-events:none;white-space:nowrap}
+.map-route{z-index:1;pointer-events:none}
+.map-node.world{z-index:5;box-sizing:border-box;overflow:hidden;white-space:normal;text-align:center;padding:6px 5px;line-height:1.05;}
+.map-node.world span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(8px,0.72vw,11px)}
+.map-node.world small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(7px,0.55vw,9px)}
+.map-node.world:hover{z-index:10}
+
+/* Posicionamento sem colisões no atlas desktop */
+.map-node.world.northam{left:27%;top:16%;width:86px;height:64px}
+.map-node.world.caribbean{left:24%;top:36%;width:82px;height:64px}
+.map-node.world.upaon{left:25%;top:54%;width:88px;height:68px}
+.map-node.world.brazil{left:16%;top:69%;width:88px;height:68px}
+.map-node.world.meso{left:30%;top:38%;width:90px;height:64px}
+.map-node.world.andes{left:34%;top:60%;width:82px;height:62px}
+.map-node.world.iberia{left:43%;top:22%;width:84px;height:62px}
+.map-node.world.europe{left:53%;top:16%;width:88px;height:66px}
+.map-node.world.maghreb{left:47%;top:34%;width:88px;height:64px}
+.map-node.world.africa{left:49%;top:51%;width:88px;height:66px}
+.map-node.world.india{left:66%;top:37%;width:88px;height:66px}
+.map-node.world.asia{left:76%;top:24%;width:90px;height:68px}
+.map-node.world.oceania{left:81%;top:66%;width:84px;height:62px}
+
+/* Rótulos geográficos ficam em áreas livres do mapa */
+.map-label.eu{left:54%;top:10%}
+.map-label.af{left:52%;top:45%}
+.map-label.as{left:73%;top:18%}
+.map-label.ams{left:20%;top:61%}
+.map-label.atl{left:39%;top:46%}
+.map-label.pac{left:7%;top:42%}
+.map-label.ind{left:60%;top:55%}
+
+/* A camada política não deve esconder a leitura cartográfica */
+.map-board[data-mode="political"] .map-label,
+.map-board[data-mode="routes"] .map-label,
+.map-board[data-mode="resources"] .map-label{opacity:.9}
+
+/* Tablet: reduz tamanho, mas mantém distância entre nós */
+@media(min-width:721px) and (max-width:1050px){
+  .map-node.world{width:78px;height:60px;padding:5px 4px}
+  .map-node.world.northam{left:27%;top:16%}.map-node.world.caribbean{left:23%;top:36%}
+  .map-node.world.upaon{left:24%;top:54%}.map-node.world.brazil{left:14%;top:70%}
+  .map-node.world.meso{left:29%;top:38%}.map-node.world.andes{left:34%;top:61%}
+  .map-node.world.iberia{left:42%;top:23%}.map-node.world.europe{left:53%;top:16%}
+  .map-node.world.maghreb{left:47%;top:35%}.map-node.world.africa{left:49%;top:52%}
+  .map-node.world.india{left:65%;top:38%}.map-node.world.asia{left:75%;top:25%}
+  .map-node.world.oceania{left:80%;top:67%}
+  .map-label{letter-spacing:2px}
+}
+
+/* Celular/tablet pequeno: nós não podem se sobrepor ao texto */
+@media(max-width:720px){
+  .map-node.world{width:68px;height:56px;padding:4px 3px;border-width:1px}
+  .map-node.world span{font-size:8px;letter-spacing:.3px}
+  .map-node.world small{font-size:6.5px}
+  .map-node.world.northam{left:26%;top:15%}.map-node.world.caribbean{left:21%;top:35%}
+  .map-node.world.upaon{left:20%;top:52%}.map-node.world.brazil{left:9%;top:69%}
+  .map-node.world.meso{left:29%;top:37%}.map-node.world.andes{left:34%;top:59%}
+  .map-node.world.iberia{left:42%;top:24%}.map-node.world.europe{left:53%;top:15%}
+  .map-node.world.maghreb{left:48%;top:34%}.map-node.world.africa{left:48%;top:51%}
+  .map-node.world.india{left:64%;top:38%}.map-node.world.asia{left:74%;top:25%}
+  .map-node.world.oceania{left:80%;top:67%}
+  .map-label.eu{left:53%;top:9%}.map-label.af{left:51%;top:45%}.map-label.as{left:72%;top:18%}
+  .map-label.ams{left:18%;top:61%}.map-label.atl{left:39%;top:47%}.map-label.pac{left:6%;top:42%}.map-label.ind{left:60%;top:55%}
+}
+@media(max-width:480px){
+  .map-node.world{width:62px;height:52px}
+  .map-node.world span{font-size:7px}.map-node.world small{font-size:6px}
+  .map-label{font-size:8px!important;letter-spacing:1px!important}
+}
